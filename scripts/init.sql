@@ -34,12 +34,14 @@ CREATE TABLE "tables"
 CREATE TABLE "profiles"
 (
     id serial primary key,
+    firebase_id text,
     name text,
     surname text,
     date_of_birth date,
     sex text,
     phone_number text,
     email text,
+    password text,
     avatar_url text
 );
 

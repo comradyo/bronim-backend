@@ -4,6 +4,7 @@ import (
 	"bronim/pkg/models"
 	"bronim/pkg/utils"
 	"bronim/service"
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -58,6 +59,8 @@ func (h *Delivery) GetProfile(w http.ResponseWriter, r *http.Request) {
 	utils.SendResponse(w, http.StatusOK, body)
 }
 
+//MVP2//
+/*
 func (h *Delivery) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	profileID := vars["profile"]
@@ -79,6 +82,7 @@ func (h *Delivery) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.SendResponse(w, http.StatusOK, body)
 }
+*/
 
 func (h *Delivery) CreateRestaurant(w http.ResponseWriter, r *http.Request) {
 	restaurant := models.Restaurant{}
@@ -145,7 +149,21 @@ func (h *Delivery) CreateReservation(w http.ResponseWriter, r *http.Request) {
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	createdReservation, err := h.repository.CreateReservation(restaurantID, tableID, reservation)
+
+	table, err := h.repository.GetTable(tableID)
+	if err != nil {
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	if table.RestaurantID != restaurantID {
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(
+			fmt.Errorf("table %s is not in restaurant %s", tableID, restaurantID),
+		))
+		return
+	}
+
+	reservation.TableID = tableID
+	createdReservation, err := h.repository.CreateReservation(reservation)
 	if err != nil {
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
@@ -162,7 +180,20 @@ func (h *Delivery) GetReservations(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	restaurantID := vars["restaurant"]
 	tableID := vars["table"]
-	reservations, err := h.repository.GetReservations(restaurantID, tableID)
+
+	table, err := h.repository.GetTable(tableID)
+	if err != nil {
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	if table.RestaurantID != restaurantID {
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(
+			fmt.Errorf("table %s is not in restaurant %s", tableID, restaurantID),
+		))
+		return
+	}
+
+	reservations, err := h.repository.GetReservations(tableID)
 	if err != nil {
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return

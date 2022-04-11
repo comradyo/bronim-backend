@@ -4,14 +4,21 @@ import (
 	"bronim/pkg/models"
 )
 
+type RestaurantsFilter struct {
+}
+
 type Repository interface {
 	CreateProfile(profile models.Profile) (models.Profile, error)
-	GetProfile(id string) (models.Profile, error)
-	UpdateProfile(id string, profile models.Profile) (models.Profile, error)
-	CreateRestaurant(profile models.Restaurant) (models.Restaurant, error)
-	GetRestaurant(id string) (models.Restaurant, error)
-	GetTables(id string) ([]models.Table, error)
-	CreateReservation(restaurantID string, tableID string, reservation models.Reservation) (models.Reservation, error)
-	GetReservations(restaurantID string, tableID string) ([]models.Reservation, error)
-	GetProfileReservations(id string) ([]models.ProfileReservation, error)
+	GetProfile(profileID string) (models.Profile, error)
+	//MVP2// UpdateProfile(profileID string, profile models.Profile) (models.Profile, error)
+	CreateRestaurant(restaurant models.Restaurant) (models.Restaurant, error)
+	GetRestaurant(restaurantID string) (models.Restaurant, error)
+	GetTable(tableID string) (models.Table, error)
+	GetTables(restaurantID string) ([]models.Table, error)
+	CreateReservation(reservation models.Reservation) (models.Reservation, error)
+	GetReservations(tableID string) ([]models.Reservation, error)
+	GetProfileReservations(profileID string) ([]models.ProfileReservation, error)
+	//MVP2// GetRestaurantsByFilter(filter RestaurantsFilter) ([]models.Restaurant, error)
+	//MVP2// GetPopularRestaurants() ([]models.Restaurant, error)
+	//MVP2// GetFavouriteRestaurants(profileID string) ([]models.Restaurant, error)
 }
