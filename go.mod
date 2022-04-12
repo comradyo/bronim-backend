@@ -4,17 +4,9 @@ go 1.17
 
 require (
 	github.com/gorilla/mux v1.8.0
-	github.com/jackc/pgx v3.6.2+incompatible
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/lib/pq v1.2.0
+	github.com/sirupsen/logrus v1.8.1
 )
 
-require (
-	github.com/cockroachdb/apd v1.1.0 // indirect
-	github.com/gofrs/uuid v4.2.0+incompatible // indirect
-	github.com/jackc/fake v0.0.0-20150926172116-812a484cc733 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/shopspring/decimal v1.3.1 // indirect
-	golang.org/x/crypto v0.0.0-20220408190544-5352b0902921 // indirect
-	golang.org/x/text v0.3.7 // indirect
-)
+require golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 // indirect

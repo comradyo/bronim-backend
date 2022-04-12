@@ -12,12 +12,13 @@ CREATE TABLE "restaurants"
     google_id text,
     address text,
     description text,
-    tags text[],
     img_url text,
     phone_number text,
     email text,
     website_url text,
     geoposition text,
+    kitchen text,
+    tags text[],
     rating int
 );
 

@@ -5,17 +5,24 @@ type Restaurant struct {
 	GoogleID    string   `json:"google_id" db:"google_id"`
 	Address     string   `json:"address" db:"address"`
 	Description string   `json:"description" db:"description"`
-	Tags        []string `json:"tags" db:"tags"`
 	ImgUrl      string   `json:"img_url" db:"img_url"`
 	PhoneNumber string   `json:"phone_number" db:"phone_number"`
 	Email       string   `json:"email" db:"email"`
 	WebsiteUrl  string   `json:"website_url" db:"website_url"`
 	Geoposition string   `json:"geoposition" db:"geoposition"`
+	Kitchen     string   `json:"kitchen" db:"kitchen"`
+	Tags        []string `json:"tags" db:"tags"`
 	Rating      string   `json:"rating" db:"rating"`
 }
 
 type Restaurants struct {
 	Arr []Restaurant `json:"restaurants"`
+}
+
+type GetRestaurantsFilter struct {
+	Tags    []string
+	Kitchen string
+	SortBy  string
 }
 
 type Table struct {
@@ -34,10 +41,10 @@ type Tables struct {
 type Profile struct {
 	ID          string `json:"id" db:"id"`
 	FirebaseID  string `json:"firebase_id" db:"firebase_id"`
-	Name        string `json:"restaurant_id" db:"restaurant_id"`
-	Surname     string `json:"floor" db:"floor"`
-	DateOfBirth string `json:"pos_x" db:"pos_x"`
-	Sex         string `json:"pos_y" db:"pos_y"`
+	Name        string `json:"restaurant_id" db:"name"`
+	Surname     string `json:"floor" db:"surname"`
+	DateOfBirth string `json:"pos_x" db:"date_of_birth"`
+	Sex         string `json:"pos_y" db:"sex"`
 	PhoneNumber string `json:"phone_number" db:"phone_number"`
 	Email       string `json:"email" db:"email"`
 	Password    string `json:"password" db:"password"`

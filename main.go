@@ -1,31 +1,37 @@
 package main
 
 import (
+	log "bronim/pkg/logger"
+	"bronim/pkg/places"
 	"bronim/service/delivery"
 	"bronim/service/repository"
 	"fmt"
 	"github.com/gorilla/mux"
 	sql "github.com/jmoiron/sqlx"
-	"log"
 	"net/http"
 )
 
 func main() {
+	log.Init(log.DebugLevel)
+
 	db, err := NewDB()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	repo := repository.NewRepository(db)
-	deli := delivery.NewDelivery(repo)
+	//TODO: credentials из конфига
+	googlePlacesClient := places.NewGooglePlacesClient("")
+	deli := delivery.NewDelivery(repo, *googlePlacesClient)
 	router := setRouter(deli)
 	port := "5000"
 
-	fmt.Println("started")
+	log.InfoAtFunc(main, "bronim started", "YO")
 	err = http.ListenAndServe(":"+port, router)
 	if err != nil {
 		log.Fatal("err = ", err)
 	}
+
 }
 
 func NewDB() (*sql.DB, error) {
@@ -50,6 +56,11 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 
 	r.HandleFunc("/restaurant", delivery.CreateRestaurant).Methods("POST")
 	r.HandleFunc("/restaurant/{restaurant:[0-9]+}", delivery.GetRestaurant).Methods("GET")
+
+	r.HandleFunc("/restaurants/popular", delivery.GetPopularRestaurants).Methods("GET")
+	r.HandleFunc("/restaurants/nearest", delivery.GetNearestRestaurants).Methods("GET")
+	r.HandleFunc("/restaurants/new", delivery.GetNewRestaurants).Methods("GET")
+	r.HandleFunc("/kitchens/{kitchen}", delivery.GetKitchenRestaurants).Methods("GET")
 
 	r.HandleFunc("/restaurant/{restaurant:[0-9]+}/tables", delivery.GetTables).Methods("GET")
 

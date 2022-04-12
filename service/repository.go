@@ -18,7 +18,11 @@ type Repository interface {
 	CreateReservation(reservation models.Reservation) (models.Reservation, error)
 	GetReservations(tableID string) ([]models.Reservation, error)
 	GetProfileReservations(profileID string) ([]models.ProfileReservation, error)
+	GetPopularRestaurants() ([]models.Restaurant, error)
+	//В деливери идем на GoogleAPI с координатами, полученными из запроса, берем айдишники близжайших ресторанов,
+	GetNearestRestaurants(apiRestaurants []models.Restaurant) ([]models.Restaurant, error)
+	GetNewRestaurants() ([]models.Restaurant, error)
+	GetKitchenRestaurants(kitchen string) ([]models.Restaurant, error)
 	//MVP2// GetRestaurantsByFilter(filter RestaurantsFilter) ([]models.Restaurant, error)
-	//MVP2// GetPopularRestaurants() ([]models.Restaurant, error)
 	//MVP2// GetFavouriteRestaurants(profileID string) ([]models.Restaurant, error)
 }
