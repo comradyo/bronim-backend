@@ -30,7 +30,7 @@ func NewDelivery(repository service.Repository, googlePlacesClient places.Google
 func (h *Delivery) CreateProfile(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.CreateProfile, "started")
 	profile := models.Profile{}
-	err := utils.GetObjectFromRequest(r.Body, profile)
+	err := utils.GetObjectFromRequest(r.Body, &profile)
 	if err != nil {
 		log.ErrorAtFunc(h.CreateProfile, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
@@ -100,7 +100,7 @@ func (h *Delivery) UpdateProfile(w http.ResponseWriter, r *http.Request) { log.D
 func (h *Delivery) CreateRestaurant(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.CreateRestaurant, "started")
 	restaurant := models.Restaurant{}
-	err := utils.GetObjectFromRequest(r.Body, restaurant)
+	err := utils.GetObjectFromRequest(r.Body, &restaurant)
 	if err != nil {
 		log.ErrorAtFunc(h.CreateRestaurant, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
@@ -274,7 +274,7 @@ func (h *Delivery) CreateReservation(w http.ResponseWriter, r *http.Request) {
 	restaurantID := vars["restaurant"]
 	tableID := vars["table"]
 	reservation := models.Reservation{}
-	err := utils.GetObjectFromRequest(r.Body, reservation)
+	err := utils.GetObjectFromRequest(r.Body, &reservation)
 	if err != nil {
 		log.ErrorAtFunc(h.CreateReservation, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))

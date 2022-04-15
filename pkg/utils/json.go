@@ -1,6 +1,7 @@
 package utils
 
 import (
+	log "bronim/pkg/logger"
 	"encoding/json"
 	"errors"
 	"io"
@@ -14,6 +15,7 @@ var (
 func GetObjectFromRequest(r io.Reader, obj interface{}) error {
 	err := json.NewDecoder(r).Decode(obj)
 	if err != nil {
+		log.ErrorAtFunc(GetObjectFromRequest, err)
 		return ErrJSONDecoding
 	}
 	return nil

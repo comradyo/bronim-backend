@@ -39,12 +39,12 @@ type Tables struct {
 }
 
 type Profile struct {
-	ID          string `json:"id" db:"id"`
+	ID          string `json:"id,omitempty" db:"id"`
 	FirebaseID  string `json:"firebase_id" db:"firebase_id"`
-	Name        string `json:"restaurant_id" db:"name"`
-	Surname     string `json:"floor" db:"surname"`
-	DateOfBirth string `json:"pos_x" db:"date_of_birth"`
-	Sex         string `json:"pos_y" db:"sex"`
+	Name        string `json:"name" db:"name"`
+	Surname     string `json:"surname" db:"surname"`
+	DateOfBirth string `json:"date_of_birth" db:"date_of_birth"`
+	Sex         string `json:"sex" db:"sex"`
 	PhoneNumber string `json:"phone_number" db:"phone_number"`
 	Email       string `json:"email" db:"email"`
 	Password    string `json:"password" db:"password"`
