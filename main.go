@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	sql "github.com/jmoiron/sqlx"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
 	db, err := NewDB()
 	if err != nil {
 		log.Fatal(err)
+		os.Exit(1)
 	}
 
 	repo := repository.NewRepository(db)
@@ -30,6 +32,7 @@ func main() {
 	err = http.ListenAndServe(":"+port, router)
 	if err != nil {
 		log.Fatal("err = ", err)
+		os.Exit(1)
 	}
 
 }
@@ -39,11 +42,13 @@ func NewDB() (*sql.DB, error) {
 	password := "password"
 	//host := viper.GetString("postgres_db.host")
 	//port := viper.GetString("postgres_db.port")
+	host := "95.163.212.36"
+	port := "5436"
 	dbname := "postgres"
 	sslmode := "disable"
 	//connStr := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", host, port, user, dbname, password, sslmode)
 
-	connStr := fmt.Sprintf("user=%s dbname=%s password=%s sslmode=%s", user, dbname, password, sslmode)
+	connStr := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", host, port, user, dbname, password, sslmode)
 	return sql.Connect("postgres", connStr)
 }
 
