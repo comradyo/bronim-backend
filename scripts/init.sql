@@ -10,8 +10,9 @@ CREATE TABLE "restaurants"
 (
     id serial primary key,
     google_id text,
-    address text,
+    name text,
     description text,
+    address text,
     img_url text,
     phone_number text,
     email text,

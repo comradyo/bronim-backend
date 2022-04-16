@@ -3,8 +3,9 @@ package models
 type Restaurant struct {
 	ID          string   `json:"id" db:"id"`
 	GoogleID    string   `json:"google_id" db:"google_id"`
-	Address     string   `json:"address" db:"address"`
+	Name        string   `json:"name" db:"name"`
 	Description string   `json:"description" db:"description"`
+	Address     string   `json:"address" db:"address"`
 	ImgUrl      string   `json:"img_url" db:"img_url"`
 	PhoneNumber string   `json:"phone_number" db:"phone_number"`
 	Email       string   `json:"email" db:"email"`
