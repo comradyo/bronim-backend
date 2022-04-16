@@ -21,8 +21,13 @@ func GetObjectFromRequest(r io.Reader, obj interface{}) error {
 	return nil
 }
 
+type _body struct {
+	Body interface{} `json:"body"`
+}
+
 func Marshall(body interface{}) ([]byte, error) {
-	res, err := json.Marshal(body)
+	jsonBody := _body{Body: body}
+	res, err := json.Marshal(jsonBody)
 	if err != nil {
 		return nil, ErrJSONEncoding
 	}
