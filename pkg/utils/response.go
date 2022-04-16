@@ -12,6 +12,7 @@ type Response struct {
 }
 
 func SendResponse(w http.ResponseWriter, status int, body []byte) {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	_, err := w.Write(body)
 	if err != nil {
