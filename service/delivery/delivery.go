@@ -142,6 +142,25 @@ func (h *Delivery) GetRestaurant(w http.ResponseWriter, r *http.Request) {
 	utils.SendResponse(w, http.StatusOK, body)
 }
 
+type debugStr struct {
+	Str string `json:"restaurants"`
+}
+
+//TODO: популярность
+func (h *Delivery) GetPopularRestaurants(w http.ResponseWriter, r *http.Request) {
+	log.DebugAtFunc(h.GetPopularRestaurants, "started")
+	deb := debugStr{Str: "yooo"}
+	body, err := utils.Marshall(deb)
+	if err != nil {
+		log.ErrorAtFunc(h.GetPopularRestaurants, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	log.DebugAtFunc(h.GetPopularRestaurants, "ended")
+	utils.SendResponse(w, http.StatusOK, body)
+}
+
+/*
 //TODO: популярность
 func (h *Delivery) GetPopularRestaurants(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.GetPopularRestaurants, "started")
@@ -163,6 +182,7 @@ func (h *Delivery) GetPopularRestaurants(w http.ResponseWriter, r *http.Request)
 	log.DebugAtFunc(h.GetPopularRestaurants, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
 }
+*/
 
 //TODO: работа с гугловской апишкой
 //В деливери идем на GoogleAPI с координатами, полученными из запроса, берем айдишники близжайших ресторанов,
