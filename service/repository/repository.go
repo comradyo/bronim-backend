@@ -79,8 +79,9 @@ select * from profiles where id = $1;
 type pqRestaurant struct {
 	ID          string         `db:"id"`
 	GoogleID    string         `db:"google_id"`
-	Address     string         `db:"address"`
+	Name        string         `db:"name"`
 	Description string         `db:"description"`
+	Address     string         `db:"address"`
 	ImgUrl      string         `db:"img_url"`
 	PhoneNumber string         `db:"phone_number"`
 	Email       string         `db:"email"`
@@ -95,8 +96,9 @@ func toPqRestaurant(restaurant models.Restaurant) pqRestaurant {
 	var r pqRestaurant
 	r.ID = restaurant.ID
 	r.GoogleID = restaurant.GoogleID
-	r.Address = restaurant.Address
+	r.Name = restaurant.Name
 	r.Description = restaurant.Description
+	r.Address = restaurant.Address
 	r.ImgUrl = restaurant.ImgUrl
 	r.PhoneNumber = restaurant.PhoneNumber
 	r.Email = restaurant.Email
@@ -112,8 +114,9 @@ func toModelRestaurant(restaurant pqRestaurant) models.Restaurant {
 	var r models.Restaurant
 	r.ID = restaurant.ID
 	r.GoogleID = restaurant.GoogleID
-	r.Address = restaurant.Address
+	r.Name = restaurant.Name
 	r.Description = restaurant.Description
+	r.Address = restaurant.Address
 	r.ImgUrl = restaurant.ImgUrl
 	r.PhoneNumber = restaurant.PhoneNumber
 	r.Email = restaurant.Email
