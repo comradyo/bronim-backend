@@ -20,7 +20,7 @@ func GetObjectFromRequest(r io.Reader, obj interface{}) error {
 	}
 	return nil
 }
-z
+
 func Marshall(body interface{}) ([]byte, error) {
 	res, err := json.Marshal(body)
 	if err != nil {
