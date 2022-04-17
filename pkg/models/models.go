@@ -16,14 +16,8 @@ type Restaurant struct {
 	Rating      string   `json:"rating" db:"rating"`
 }
 
-type Restaurants struct {
+type RestaurantList struct {
 	Arr []Restaurant `json:"restaurants"`
-}
-
-type GetRestaurantsFilter struct {
-	Tags    []string
-	Kitchen string
-	SortBy  string
 }
 
 type Table struct {
@@ -35,8 +29,17 @@ type Table struct {
 	Places       string `json:"places" db:"places"`
 }
 
-type Tables struct {
+type TableList struct {
 	Arr []Table `json:"tables"`
+}
+
+type TableAndReservations struct {
+	TableID       string `json:"table_id"`
+	ReservedTimes []int  `json:"reserved_times"`
+}
+
+type TableAndReservationsList struct {
+	Arr []TableAndReservations `json:"reservations"`
 }
 
 type Profile struct {
@@ -62,7 +65,7 @@ type Reservation struct {
 	Comment         string `json:"comment" db:"comment"`
 }
 
-type Reservations struct {
+type ReservationList struct {
 	Arr []Reservation `json:"reservations"`
 }
 
@@ -71,6 +74,6 @@ type ProfileReservation struct {
 	Reservation Reservation `json:"reservation"`
 }
 
-type ProfileReservations struct {
+type ProfileReservationList struct {
 	Arr []ProfileReservation `json:"profile_reservations"`
 }

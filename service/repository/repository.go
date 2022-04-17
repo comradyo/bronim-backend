@@ -76,58 +76,6 @@ select * from profiles where id = $1;
 }
 */
 
-type pqRestaurant struct {
-	ID          string         `db:"id"`
-	GoogleID    string         `db:"google_id"`
-	Name        string         `db:"name"`
-	Description string         `db:"description"`
-	Address     string         `db:"address"`
-	ImgUrl      string         `db:"img_url"`
-	PhoneNumber string         `db:"phone_number"`
-	Email       string         `db:"email"`
-	WebsiteUrl  string         `db:"website_url"`
-	Geoposition string         `db:"geoposition"`
-	Kitchen     string         `db:"kitchen"`
-	Tags        pq.StringArray `db:"tags"`
-	Rating      string         `db:"rating"`
-}
-
-func toPqRestaurant(restaurant models.Restaurant) pqRestaurant {
-	var r pqRestaurant
-	r.ID = restaurant.ID
-	r.GoogleID = restaurant.GoogleID
-	r.Name = restaurant.Name
-	r.Description = restaurant.Description
-	r.Address = restaurant.Address
-	r.ImgUrl = restaurant.ImgUrl
-	r.PhoneNumber = restaurant.PhoneNumber
-	r.Email = restaurant.Email
-	r.WebsiteUrl = restaurant.WebsiteUrl
-	r.Geoposition = restaurant.Geoposition
-	r.Kitchen = restaurant.Kitchen
-	r.Tags = restaurant.Tags
-	r.Rating = restaurant.Rating
-	return r
-}
-
-func toModelRestaurant(restaurant pqRestaurant) models.Restaurant {
-	var r models.Restaurant
-	r.ID = restaurant.ID
-	r.GoogleID = restaurant.GoogleID
-	r.Name = restaurant.Name
-	r.Description = restaurant.Description
-	r.Address = restaurant.Address
-	r.ImgUrl = restaurant.ImgUrl
-	r.PhoneNumber = restaurant.PhoneNumber
-	r.Email = restaurant.Email
-	r.WebsiteUrl = restaurant.WebsiteUrl
-	r.Geoposition = restaurant.Geoposition
-	r.Kitchen = restaurant.Kitchen
-	r.Tags = restaurant.Tags
-	r.Rating = restaurant.Rating
-	return r
-}
-
 func (r *Repository) CreateRestaurant(restaurant models.Restaurant) (models.Restaurant, error) {
 	query := `
 insert into restaurants (google_id, address, description, img_url, phone_number, email, website_url, geoposition, kitchen, tags, rating)
@@ -163,25 +111,6 @@ select * from restaurants where id = $1;
 	err := r.db.Get(&pqRest, query, restaurantID)
 	restaurant := toModelRestaurant(pqRest)
 	return restaurant, err
-}
-
-func (r *Repository) scanRestaurants(query string, args ...interface{}) ([]models.Restaurant, error) {
-	rows, err := r.db.Queryx(query, args...)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var restaurants []models.Restaurant
-	for rows.Next() {
-		var t pqRestaurant
-		err := rows.StructScan(&t)
-		if err != nil {
-			return nil, err
-		}
-		restaurant := toModelRestaurant(t)
-		restaurants = append(restaurants, restaurant)
-	}
-	return restaurants, nil
 }
 
 //TODO: популярность
@@ -274,7 +203,7 @@ select * from reservations where id = $1;
 	return reservation, err
 }
 
-func (r *Repository) GetReservations(tableID string) ([]models.Reservation, error) {
+func (r *Repository) GetTableReservations(tableID string) ([]models.Reservation, error) {
 	query := `
 select * from reservations where table_id = $1;
 `
@@ -318,4 +247,54 @@ select r.*, rsv.* from
 		reservations = append(reservations, t)
 	}
 	return reservations, nil
+}
+
+func (r *Repository) GetRestaurantReservations(restaurantID, date string, numOfGuests string) ([]models.TableAndReservations, error) {
+	query := `
+select tb.id as table_id, array_agg(rs.cell_id) as reserved_cells, array_agg(rs.num_of_cells) as num_of_cells from
+             reservations rs
+                 join
+                 tables tb
+                     on rs.table_id = tb.id
+                 join restaurants rt
+                     on rt.id = tb.restaurant_id
+                where tb.restaurant_id = $1 and rs.reservation_date = $2 and tb.places = $3
+group by tb.id;
+`
+	rows, err := r.db.Queryx(query, restaurantID, date, numOfGuests)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var reservations []models.TableAndReservations
+	for rows.Next() {
+		var rs restaurantReservation
+		err := rows.StructScan(&rs)
+		if err != nil {
+			return nil, err
+		}
+		trs := toTableAndReservation(rs)
+		reservations = append(reservations, trs)
+	}
+	return reservations, nil
+}
+
+type restaurantReservation struct {
+	TableID    string        `db:"table_id"`
+	CellIDs    pq.Int64Array `db:"reserved_cells"`
+	NumOfCells pq.Int64Array `db:"num_of_cells"`
+}
+
+func toTableAndReservation(rs restaurantReservation) models.TableAndReservations {
+	var trs models.TableAndReservations
+	trs.TableID = rs.TableID
+	for i := range rs.CellIDs {
+		var cellIDs []int
+		numOfCells := int(rs.NumOfCells[i])
+		for j := 0; j < numOfCells; j++ {
+			cellIDs = append(cellIDs, int(rs.CellIDs[i])+j)
+		}
+		trs.ReservedTimes = append(trs.ReservedTimes, cellIDs...)
+	}
+	return trs
 }

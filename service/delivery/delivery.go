@@ -150,7 +150,7 @@ func (h *Delivery) GetPopularRestaurants(w http.ResponseWriter, r *http.Request)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	restaurants := models.Restaurants{
+	restaurants := models.RestaurantList{
 		Arr: rests,
 	}
 	body, err := utils.Marshall(restaurants)
@@ -187,7 +187,7 @@ func (h *Delivery) GetNearestRestaurants(w http.ResponseWriter, r *http.Request)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	restaurants := models.Restaurants{
+	restaurants := models.RestaurantList{
 		Arr: rests,
 	}
 	body, err := utils.Marshall(restaurants)
@@ -208,7 +208,7 @@ func (h *Delivery) GetNewRestaurants(w http.ResponseWriter, r *http.Request) {
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	restaurants := models.Restaurants{
+	restaurants := models.RestaurantList{
 		Arr: rests,
 	}
 	body, err := utils.Marshall(restaurants)
@@ -231,7 +231,7 @@ func (h *Delivery) GetKitchenRestaurants(w http.ResponseWriter, r *http.Request)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	restaurants := models.Restaurants{
+	restaurants := models.RestaurantList{
 		Arr: rests,
 	}
 	body, err := utils.Marshall(restaurants)
@@ -244,6 +244,42 @@ func (h *Delivery) GetKitchenRestaurants(w http.ResponseWriter, r *http.Request)
 	utils.SendResponse(w, http.StatusOK, body)
 }
 
+func (h *Delivery) GetRestaurantReservations(w http.ResponseWriter, r *http.Request) {
+	log.DebugAtFunc(h.GetRestaurantReservations, "started")
+	vars := mux.Vars(r)
+	restaurantID := vars["restaurant"]
+	query := r.URL.Query()
+
+	var date string
+	var numOfGuests string
+	if len(query["date"]) > 0 {
+		date = query["date"][0]
+	}
+	if len(query["guests"]) > 0 {
+		numOfGuests = query["guests"][0]
+	}
+
+	reservations, err := h.repository.GetRestaurantReservations(restaurantID, date, numOfGuests)
+	if err != nil {
+		log.ErrorAtFunc(h.GetRestaurantReservations, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	reservationsList := models.TableAndReservationsList{
+		Arr: reservations,
+	}
+	body, err := utils.Marshall(reservationsList)
+	if err != nil {
+		log.ErrorAtFunc(h.GetRestaurantReservations, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	log.DebugAtFunc(h.GetRestaurantReservations, "ended")
+	utils.SendResponse(w, http.StatusOK, body)
+}
+
+//MVP2//
+/*
 func (h *Delivery) GetTables(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.GetTables, "started")
 	vars := mux.Vars(r)
@@ -266,6 +302,7 @@ func (h *Delivery) GetTables(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.GetTables, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
 }
+*/
 
 func (h *Delivery) CreateReservation(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.CreateReservation, "started")
@@ -310,15 +347,17 @@ func (h *Delivery) CreateReservation(w http.ResponseWriter, r *http.Request) {
 	utils.SendResponse(w, http.StatusOK, body)
 }
 
-func (h *Delivery) GetReservations(w http.ResponseWriter, r *http.Request) {
-	log.DebugAtFunc(h.GetReservations, "started")
+//MVP2//
+/*
+func (h *Delivery) GetTableReservations(w http.ResponseWriter, r *http.Request) {
+	log.DebugAtFunc(h.GetTableReservations, "started")
 	vars := mux.Vars(r)
 	restaurantID := vars["restaurant"]
 	tableID := vars["table"]
 
 	table, err := h.repository.GetTable(tableID)
 	if err != nil {
-		log.ErrorAtFunc(h.GetReservations, err)
+		log.ErrorAtFunc(h.GetTableReservations, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
@@ -329,9 +368,9 @@ func (h *Delivery) GetReservations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reservations, err := h.repository.GetReservations(tableID)
+	reservations, err := h.repository.GetTableReservations(tableID)
 	if err != nil {
-		log.ErrorAtFunc(h.GetReservations, err)
+		log.ErrorAtFunc(h.GetTableReservations, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
@@ -340,13 +379,14 @@ func (h *Delivery) GetReservations(w http.ResponseWriter, r *http.Request) {
 	}
 	body, err := utils.Marshall(reservationsList)
 	if err != nil {
-		log.ErrorAtFunc(h.GetReservations, err)
+		log.ErrorAtFunc(h.GetTableReservations, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	log.DebugAtFunc(h.GetReservations, "ended")
+	log.DebugAtFunc(h.GetTableReservations, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
 }
+*/
 
 func (h *Delivery) GetProfileReservations(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.GetProfileReservations, "started")
@@ -358,7 +398,7 @@ func (h *Delivery) GetProfileReservations(w http.ResponseWriter, r *http.Request
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	profileReservationsList := models.ProfileReservations{
+	profileReservationsList := models.ProfileReservationList{
 		Arr: profileReservations,
 	}
 	body, err := utils.Marshall(profileReservationsList)

@@ -39,12 +39,15 @@ func main() {
 
 func NewDB() (*sql.DB, error) {
 	user := "postgres"
-	password := "yo_password"
+	//password := "yo_password"
+	password := "password"
 	//host := viper.GetString("postgres_db.host")
 	//port := viper.GetString("postgres_db.port")
-	host := "95.163.212.36"
+	//host := "95.163.212.36"
+	host := "localhost"
 	port := "5432"
-	dbname := "bronim"
+	//dbname := "bronim"
+	dbname := "postgres"
 	sslmode := "disable"
 	//connStr := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", host, port, user, dbname, password, sslmode)
 
@@ -60,17 +63,18 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 	//MVP2// r.HandleFunc("/profile/{profile:[0-9]+}", delivery.UpdateProfile).Methods("POST")
 
 	r.HandleFunc("/restaurant", delivery.CreateRestaurant).Methods("POST")
-	r.HandleFunc("/restaurant/{restaurant:[0-9]+}", delivery.GetRestaurant).Methods("GET")
+	r.HandleFunc("/restaurants/{restaurant:[0-9]+}", delivery.GetRestaurant).Methods("GET")
 
 	r.HandleFunc("/restaurants/popular", delivery.GetPopularRestaurants).Methods("GET")
 	r.HandleFunc("/restaurants/nearest", delivery.GetNearestRestaurants).Methods("GET")
 	r.HandleFunc("/restaurants/new", delivery.GetNewRestaurants).Methods("GET")
 	r.HandleFunc("/kitchens/{kitchen}", delivery.GetKitchenRestaurants).Methods("GET")
 
-	r.HandleFunc("/restaurant/{restaurant:[0-9]+}/tables", delivery.GetTables).Methods("GET")
+	r.HandleFunc("/restaurants/{restaurant:[0-9]+}/reservations", delivery.GetRestaurantReservations).Methods("GET")
 
-	r.HandleFunc("/restaurant/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.CreateReservation).Methods("POST")
-	r.HandleFunc("/restaurant/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.GetReservations).Methods("GET")
+	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables", delivery.GetTables).Methods("GET")
+	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.CreateReservation).Methods("POST")
+	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.GetTableReservations).Methods("GET")
 
 	r.HandleFunc("/profile/{profile:[0-9]+}/reservations", delivery.GetProfileReservations).Methods("GET")
 
