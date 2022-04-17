@@ -39,15 +39,12 @@ func main() {
 
 func NewDB() (*sql.DB, error) {
 	user := "postgres"
-	//password := "yo_password"
-	password := "password"
+	password := "yo_password"
 	//host := viper.GetString("postgres_db.host")
 	//port := viper.GetString("postgres_db.port")
-	//host := "95.163.212.36"
-	host := "localhost"
+	host := "95.163.212.36"
 	port := "5432"
-	//dbname := "bronim"
-	dbname := "postgres"
+	dbname := "bronim"
 	sslmode := "disable"
 	//connStr := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s", host, port, user, dbname, password, sslmode)
 
