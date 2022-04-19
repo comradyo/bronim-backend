@@ -64,6 +64,7 @@ type Reservation struct {
 	TableID         string        `json:"table_id" db:"table_id"`
 	ProfileID       string        `json:"profile_id" db:"profile_id"`
 	ReservationDate string        `json:"reservation_date" db:"reservation_date"`
+	NumOfGuests     int           `json:"guests" db:"guests"`
 	Cells           pq.Int64Array `json:"cells" db:"cells"`
 	Comment         string        `json:"comment" db:"comment"`
 }
@@ -73,8 +74,8 @@ type ReservationList struct {
 }
 
 type ProfileReservation struct {
-	Restaurant  Restaurant  `json:"restaurant"`
-	Reservation Reservation `json:"reservation"`
+	Restaurant  Restaurant  `json:"restaurant" db:"restaurant"`
+	Reservation Reservation `json:"reservation" db:"reservation"`
 }
 
 type ProfileReservationList struct {

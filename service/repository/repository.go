@@ -223,10 +223,10 @@ select * from reservations where table_id = $1;
 
 func (r *Repository) GetProfileReservations(profileID string) ([]models.ProfileReservation, error) {
 	query := `
-select r.*, rsv.* from 
-                      reservations rsv 
-                          join tables t on rsv.table_id = t.id 
-                          join restaurants r on t.restaurant_id = r.id 
+select restaurant.*, reservation.* from 
+                      reservations reservation
+                          join tables t on reservation.table_id = t.id 
+                          join restaurants restaurant on t.restaurant_id = restaurant.id 
                   where profile_id = $1;
 `
 	rows, err := r.db.Queryx(query, profileID)
@@ -237,7 +237,29 @@ select r.*, rsv.* from
 	var reservations []models.ProfileReservation
 	for rows.Next() {
 		var t models.ProfileReservation
-		err := rows.StructScan(&t)
+		err := rows.Scan(
+			&t.Restaurant.ID,
+			&t.Restaurant.GoogleID,
+			&t.Restaurant.Name,
+			&t.Restaurant.Description,
+			&t.Restaurant.Address,
+			&t.Restaurant.ImgUrl,
+			&t.Restaurant.PhoneNumber,
+			&t.Restaurant.Email,
+			&t.Restaurant.WebsiteUrl,
+			&t.Restaurant.Geoposition,
+			&t.Restaurant.Kitchen,
+			&t.Restaurant.Tags,
+			&t.Restaurant.Rating,
+			&t.Restaurant.StartsAtCellID,
+			&t.Restaurant.EndsAtCellID,
+			&t.Reservation.ID,
+			&t.Reservation.TableID,
+			&t.Reservation.ProfileID,
+			&t.Reservation.ReservationDate,
+			&t.Reservation.Cells,
+			&t.Reservation.Comment,
+		)
 		if err != nil {
 			return nil, err
 		}

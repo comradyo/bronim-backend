@@ -73,7 +73,7 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.CreateReservation).Methods("POST")
 	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.GetTableReservations).Methods("GET")
 
-	r.HandleFunc("/profile/{profile:[0-9]+}/reservations", delivery.GetProfileReservations).Methods("GET")
+	r.HandleFunc("/profiles/{profile:[0-9]+}/reservations", delivery.GetProfileReservations).Methods("GET")
 
 	//TODO: Vote
 
