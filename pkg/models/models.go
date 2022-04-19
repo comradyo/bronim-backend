@@ -1,19 +1,21 @@
 package models
 
 type Restaurant struct {
-	ID          string   `json:"id" db:"id"`
-	GoogleID    string   `json:"google_id" db:"google_id"`
-	Name        string   `json:"name" db:"name"`
-	Description string   `json:"description" db:"description"`
-	Address     string   `json:"address" db:"address"`
-	ImgUrl      string   `json:"img_url" db:"img_url"`
-	PhoneNumber string   `json:"phone_number" db:"phone_number"`
-	Email       string   `json:"email" db:"email"`
-	WebsiteUrl  string   `json:"website_url" db:"website_url"`
-	Geoposition string   `json:"geoposition" db:"geoposition"`
-	Kitchen     string   `json:"kitchen" db:"kitchen"`
-	Tags        []string `json:"tags" db:"tags"`
-	Rating      string   `json:"rating" db:"rating"`
+	ID             string   `json:"id" db:"id"`
+	GoogleID       string   `json:"google_id" db:"google_id"`
+	Name           string   `json:"name" db:"name"`
+	Description    string   `json:"description" db:"description"`
+	Address        string   `json:"address" db:"address"`
+	ImgUrl         string   `json:"img_url" db:"img_url"`
+	PhoneNumber    string   `json:"phone_number" db:"phone_number"`
+	Email          string   `json:"email" db:"email"`
+	WebsiteUrl     string   `json:"website_url" db:"website_url"`
+	Geoposition    string   `json:"geoposition" db:"geoposition"`
+	Kitchen        string   `json:"kitchen" db:"kitchen"`
+	Tags           []string `json:"tags" db:"tags"`
+	Rating         string   `json:"rating" db:"rating"`
+	StartsAtCellID int      `json:"starts_at_cell_id" db:"starts_at_cell_id"`
+	EndsAtCellID   int      `json:"ends_at_cell_id" db:"ends_at_cell_id"`
 }
 
 type RestaurantList struct {

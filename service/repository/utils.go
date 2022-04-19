@@ -6,19 +6,21 @@ import (
 )
 
 type pqRestaurant struct {
-	ID          string         `db:"id"`
-	GoogleID    string         `db:"google_id"`
-	Name        string         `db:"name"`
-	Description string         `db:"description"`
-	Address     string         `db:"address"`
-	ImgUrl      string         `db:"img_url"`
-	PhoneNumber string         `db:"phone_number"`
-	Email       string         `db:"email"`
-	WebsiteUrl  string         `db:"website_url"`
-	Geoposition string         `db:"geoposition"`
-	Kitchen     string         `db:"kitchen"`
-	Tags        pq.StringArray `db:"tags"`
-	Rating      string         `db:"rating"`
+	ID             string         `db:"id"`
+	GoogleID       string         `db:"google_id"`
+	Name           string         `db:"name"`
+	Description    string         `db:"description"`
+	Address        string         `db:"address"`
+	ImgUrl         string         `db:"img_url"`
+	PhoneNumber    string         `db:"phone_number"`
+	Email          string         `db:"email"`
+	WebsiteUrl     string         `db:"website_url"`
+	Geoposition    string         `db:"geoposition"`
+	Kitchen        string         `db:"kitchen"`
+	Tags           pq.StringArray `db:"tags"`
+	Rating         string         `db:"rating"`
+	StartsAtCellID int            `db:"starts_at_cell_id"`
+	EndsAtCellID   int            `db:"ends_at_cell_id"`
 }
 
 func toPqRestaurant(restaurant models.Restaurant) pqRestaurant {
@@ -36,6 +38,8 @@ func toPqRestaurant(restaurant models.Restaurant) pqRestaurant {
 	r.Kitchen = restaurant.Kitchen
 	r.Tags = restaurant.Tags
 	r.Rating = restaurant.Rating
+	r.StartsAtCellID = restaurant.StartsAtCellID
+	r.EndsAtCellID = restaurant.EndsAtCellID
 	return r
 }
 
@@ -54,6 +58,8 @@ func toModelRestaurant(restaurant pqRestaurant) models.Restaurant {
 	r.Kitchen = restaurant.Kitchen
 	r.Tags = restaurant.Tags
 	r.Rating = restaurant.Rating
+	r.StartsAtCellID = restaurant.StartsAtCellID
+	r.EndsAtCellID = restaurant.EndsAtCellID
 	return r
 }
 
