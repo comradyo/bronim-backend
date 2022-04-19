@@ -12,7 +12,8 @@ import (
 )
 
 func errBytes(err error) []byte {
-	return []byte(err.Error())
+	bytes, _ := utils.Marshall(models.Err{ErrStr: err.Error()})
+	return bytes
 }
 
 type Delivery struct {

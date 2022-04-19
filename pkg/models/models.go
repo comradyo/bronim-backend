@@ -77,3 +77,7 @@ type ProfileReservation struct {
 type ProfileReservationList struct {
 	Arr []ProfileReservation `json:"profile_reservations"`
 }
+
+type Err struct {
+	ErrStr string `json:"error"`
+}
