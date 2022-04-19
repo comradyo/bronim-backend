@@ -107,6 +107,7 @@ func (h *Delivery) CreateRestaurant(w http.ResponseWriter, r *http.Request) {
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
+	fmt.Println(restaurant)
 	createdRestaurant, err := h.repository.CreateRestaurant(restaurant)
 	if err != nil {
 		log.ErrorAtFunc(h.CreateRestaurant, err)

@@ -1,21 +1,23 @@
 package models
 
+import "github.com/lib/pq"
+
 type Restaurant struct {
-	ID             string   `json:"id" db:"id"`
-	GoogleID       string   `json:"google_id" db:"google_id"`
-	Name           string   `json:"name" db:"name"`
-	Description    string   `json:"description" db:"description"`
-	Address        string   `json:"address" db:"address"`
-	ImgUrl         string   `json:"img_url" db:"img_url"`
-	PhoneNumber    string   `json:"phone_number" db:"phone_number"`
-	Email          string   `json:"email" db:"email"`
-	WebsiteUrl     string   `json:"website_url" db:"website_url"`
-	Geoposition    string   `json:"geoposition" db:"geoposition"`
-	Kitchen        string   `json:"kitchen" db:"kitchen"`
-	Tags           []string `json:"tags" db:"tags"`
-	Rating         string   `json:"rating" db:"rating"`
-	StartsAtCellID int      `json:"starts_at_cell_id" db:"starts_at_cell_id"`
-	EndsAtCellID   int      `json:"ends_at_cell_id" db:"ends_at_cell_id"`
+	ID             string         `json:"id" db:"id"`
+	GoogleID       string         `json:"google_id" db:"google_id"`
+	Name           string         `json:"name" db:"name"`
+	Description    string         `json:"description" db:"description"`
+	Address        string         `json:"address" db:"address"`
+	ImgUrl         string         `json:"img_url" db:"img_url"`
+	PhoneNumber    string         `json:"phone_number" db:"phone_number"`
+	Email          string         `json:"email" db:"email"`
+	WebsiteUrl     string         `json:"website_url" db:"website_url"`
+	Geoposition    string         `json:"geoposition" db:"geoposition"`
+	Kitchen        string         `json:"kitchen" db:"kitchen"`
+	Tags           pq.StringArray `json:"tags" db:"tags"`
+	Rating         string         `json:"rating" db:"rating"`
+	StartsAtCellID string         `json:"starts_at_cell_id" db:"starts_at_cell_id"`
+	EndsAtCellID   string         `json:"ends_at_cell_id" db:"ends_at_cell_id"`
 }
 
 type RestaurantList struct {
@@ -36,8 +38,8 @@ type TableList struct {
 }
 
 type TableAndReservations struct {
-	TableID       string `json:"table_id"`
-	ReservedTimes []int  `json:"reserved_times"`
+	TableID       string        `json:"table_id" db:"table_id"`
+	ReservedTimes pq.Int64Array `json:"reserved_cells" db:"reserved_cells"`
 }
 
 type TableAndReservationsList struct {
@@ -58,13 +60,12 @@ type Profile struct {
 }
 
 type Reservation struct {
-	ID              string `json:"id" db:"id"`
-	TableID         string `json:"table_id" db:"table_id"`
-	ProfileID       string `json:"profile_id" db:"profile_id"`
-	ReservationDate string `json:"reservation_date" db:"reservation_date"`
-	CellID          string `json:"cell_id" db:"cell_id"`
-	NumOfCells      string `json:"num_of_cells" db:"num_of_cells"`
-	Comment         string `json:"comment" db:"comment"`
+	ID              string        `json:"id,omitempty" db:"id"`
+	TableID         string        `json:"table_id" db:"table_id"`
+	ProfileID       string        `json:"profile_id" db:"profile_id"`
+	ReservationDate string        `json:"reservation_date" db:"reservation_date"`
+	Cells           pq.Int64Array `json:"cells" db:"cells"`
+	Comment         string        `json:"comment" db:"comment"`
 }
 
 type ReservationList struct {

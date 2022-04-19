@@ -3,7 +3,6 @@ package repository
 import (
 	"bronim/pkg/models"
 	sql "github.com/jmoiron/sqlx"
-	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 )
 
@@ -83,19 +82,18 @@ values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::text[], $11)
 returning (id)
 `
 	var insertedID string
-	pqRest := toPqRestaurant(restaurant)
 	err := r.db.Get(&insertedID, query,
-		pqRest.GoogleID,
-		pqRest.Address,
-		pqRest.Description,
-		pqRest.ImgUrl,
-		pqRest.PhoneNumber,
-		pqRest.Email,
-		pqRest.WebsiteUrl,
-		pqRest.Geoposition,
-		pqRest.Kitchen,
-		pqRest.Tags,
-		pqRest.Rating,
+		restaurant.GoogleID,
+		restaurant.Address,
+		restaurant.Description,
+		restaurant.ImgUrl,
+		restaurant.PhoneNumber,
+		restaurant.Email,
+		restaurant.WebsiteUrl,
+		restaurant.Geoposition,
+		restaurant.Kitchen,
+		restaurant.Tags,
+		restaurant.Rating,
 	)
 	if err != nil {
 		return models.Restaurant{}, err
@@ -107,9 +105,8 @@ func (r *Repository) GetRestaurant(restaurantID string) (models.Restaurant, erro
 	query := `
 select * from restaurants where id = $1;
 `
-	var pqRest pqRestaurant
-	err := r.db.Get(&pqRest, query, restaurantID)
-	restaurant := toModelRestaurant(pqRest)
+	var restaurant models.Restaurant
+	err := r.db.Get(&restaurant, query, restaurantID)
 	return restaurant, err
 }
 
@@ -186,9 +183,9 @@ select * from tables where restaurant_id = $1;
 func (r *Repository) CreateReservation(reservation models.Reservation) (models.Reservation, error) {
 	query := `
 insert into reservations
-(table_id, profile_id, reservation_date, cell_id, num_of_cells, comment) 
+(table_id, profile_id, reservation_date, cells, comment) 
 VALUES 
-($1, $2, $3, $4, $5, $6)
+($1, $2, $3, $4, $5)
 returning id
 `
 	var insertedID int
@@ -251,15 +248,17 @@ select r.*, rsv.* from
 
 func (r *Repository) GetRestaurantReservations(restaurantID, date string, numOfGuests string) ([]models.TableAndReservations, error) {
 	query := `
-select tb.id as table_id, array_agg(rs.cell_id) as reserved_cells, array_agg(rs.num_of_cells) as num_of_cells from
-             reservations rs
-                 join
-                 tables tb
-                     on rs.table_id = tb.id
-                 join restaurants rt
-                     on rt.id = tb.restaurant_id
-                where tb.restaurant_id = $1 and rs.reservation_date = $2 and tb.places = $3
-group by tb.id;
+select table_id, array_agg(reserved_cells order by reserved_cells) as reserved_cells from (
+                                                                      select distinct tb.id as table_id, unnest(rs.cells) as reserved_cells from
+                                                                          reservations rs
+                                                                              join
+                                                                          tables tb
+                                                                          on rs.table_id = tb.id
+                                                                              join restaurants rt
+                                                                                   on rt.id = tb.restaurant_id
+                                                                      where tb.restaurant_id = $1 and rs.reservation_date = $2 and tb.places = $3
+                                                                      ) as s
+group by table_id;
 `
 	rows, err := r.db.Queryx(query, restaurantID, date, numOfGuests)
 	if err != nil {
@@ -268,33 +267,12 @@ group by tb.id;
 	defer rows.Close()
 	var reservations []models.TableAndReservations
 	for rows.Next() {
-		var rs restaurantReservation
-		err := rows.StructScan(&rs)
+		var trs models.TableAndReservations
+		err := rows.StructScan(&trs)
 		if err != nil {
 			return nil, err
 		}
-		trs := toTableAndReservation(rs)
 		reservations = append(reservations, trs)
 	}
 	return reservations, nil
-}
-
-type restaurantReservation struct {
-	TableID    string        `db:"table_id"`
-	CellIDs    pq.Int64Array `db:"reserved_cells"`
-	NumOfCells pq.Int64Array `db:"num_of_cells"`
-}
-
-func toTableAndReservation(rs restaurantReservation) models.TableAndReservations {
-	var trs models.TableAndReservations
-	trs.TableID = rs.TableID
-	for i := range rs.CellIDs {
-		var cellIDs []int
-		numOfCells := int(rs.NumOfCells[i])
-		for j := 0; j < numOfCells; j++ {
-			cellIDs = append(cellIDs, int(rs.CellIDs[i])+j)
-		}
-		trs.ReservedTimes = append(trs.ReservedTimes, cellIDs...)
-	}
-	return trs
 }

@@ -41,7 +41,7 @@ CREATE TABLE "profiles"
     firebase_id text not null default '',
     name text not null default '',
     surname text not null default '',
-    date_of_birth date not null default now(),
+    date_of_birth text not null default '',
     sex text not null default '',
     phone_number text not null default '',
     email text not null default '',
@@ -54,9 +54,8 @@ CREATE TABLE "reservations"
     id serial primary key,
     table_id int references "tables" (id) on delete cascade not null,
     profile_id int references "profiles" (id) on delete cascade not null,
-    reservation_date date not null default now(),
-    cell_id int default 0,
-    num_of_cells int default 0,
+    reservation_date text default '',
+    cells int[],
     comment text default ''
 );
 
