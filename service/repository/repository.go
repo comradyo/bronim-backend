@@ -259,6 +259,7 @@ select restaurant.*, reservation.* from
 			&t.Reservation.ReservationDate,
 			&t.Reservation.Cells,
 			&t.Reservation.Comment,
+			&t.Reservation.NumOfGuests,
 		)
 		if err != nil {
 			return nil, err

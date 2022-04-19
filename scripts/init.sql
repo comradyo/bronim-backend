@@ -56,7 +56,8 @@ CREATE TABLE "reservations"
     profile_id int references "profiles" (id) on delete cascade not null,
     reservation_date text default '',
     cells int[],
-    comment text default ''
+    num_of_guests int default 0,
+    comment text default '',
 );
 
 --TODO: Недавно просмотренные, Избранное (rest_id, cli_id), Рейтинг (rest_id, cli_id, value)
