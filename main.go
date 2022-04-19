@@ -55,8 +55,8 @@ func NewDB() (*sql.DB, error) {
 func setRouter(delivery *delivery.Delivery) *mux.Router {
 	r := mux.NewRouter().PathPrefix("/bronim").Subrouter()
 
-	r.HandleFunc("/profile", delivery.CreateProfile).Methods("POST")
-	r.HandleFunc("/profile/{profile:[0-9]+}", delivery.GetProfile).Methods("GET")
+	r.HandleFunc("/profiles", delivery.CreateProfile).Methods("POST")
+	r.HandleFunc("/profiles/{uuid:[0-9]+}", delivery.GetProfile).Methods("GET")
 	//MVP2// r.HandleFunc("/profile/{profile:[0-9]+}", delivery.UpdateProfile).Methods("POST")
 
 	r.HandleFunc("/restaurant", delivery.CreateRestaurant).Methods("POST")

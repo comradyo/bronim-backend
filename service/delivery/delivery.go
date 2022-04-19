@@ -55,7 +55,7 @@ func (h *Delivery) CreateProfile(w http.ResponseWriter, r *http.Request) {
 func (h *Delivery) GetProfile(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.GetProfile, "started")
 	vars := mux.Vars(r)
-	profileID := vars["profile"]
+	profileID := vars["uuid"]
 	profile, err := h.repository.GetProfile(profileID)
 	if err != nil {
 		log.ErrorAtFunc(h.GetProfile, err)

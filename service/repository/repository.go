@@ -48,7 +48,7 @@ returning (id)
 
 func (r *Repository) GetProfile(profileID string) (models.Profile, error) {
 	query := `
-select * from profiles where id = $1
+select * from profiles where firebase_id = $1
 `
 	var profile models.Profile
 	err := r.db.Get(&profile, query, profileID)
