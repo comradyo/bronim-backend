@@ -183,9 +183,9 @@ select * from tables where restaurant_id = $1;
 func (r *Repository) CreateReservation(reservation models.Reservation) (models.Reservation, error) {
 	query := `
 insert into reservations
-(table_id, profile_id, reservation_date, cells, comment) 
+(table_id, profile_id, reservation_date, cells, comment, num_of_guests) 
 VALUES 
-($1, $2, $3, $4, $5)
+($1, $2, $3, $4, $5, $6)
 returning id
 `
 	var insertedID int
@@ -200,6 +200,8 @@ select * from reservations where id = $1;
 	return reservation, err
 }
 
+//MVP2//
+/*
 func (r *Repository) GetTableReservations(tableID string) ([]models.Reservation, error) {
 	query := `
 select * from reservations where table_id = $1;
@@ -220,6 +222,7 @@ select * from reservations where table_id = $1;
 	}
 	return reservations, nil
 }
+*/
 
 func (r *Repository) GetProfileReservations(profileID string) ([]models.ProfileReservation, error) {
 	query := `
@@ -227,7 +230,7 @@ select restaurant.*, reservation.* from
                       reservations reservation
                           join tables t on reservation.table_id = t.id 
                           join restaurants restaurant on t.restaurant_id = restaurant.id 
-                  where profile_id = $1;
+                  where reservation.profile_id = $1;
 `
 	rows, err := r.db.Queryx(query, profileID)
 	if err != nil {

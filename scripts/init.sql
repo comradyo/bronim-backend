@@ -38,7 +38,7 @@ CREATE TABLE "tables"
 CREATE TABLE "profiles"
 (
     id serial primary key,
-    firebase_id text not null default '',
+    firebase_id text not null default '' unique,
     name text not null default '',
     surname text not null default '',
     date_of_birth text not null default '',
@@ -49,18 +49,31 @@ CREATE TABLE "profiles"
     avatar_url text not null default ''
 );
 
+/*
+ CREATE TABLE "reservations"
+(
+    id serial primary key,
+    table_id int references "tables" (id) on delete cascade not null,
+    profile_id text references "profiles" (id) on delete cascade not null,
+    reservation_date text default '',
+    cells int[],
+    comment text default '',
+    num_of_guests int default 0
+);
+ */
+
 CREATE TABLE "reservations"
 (
     id serial primary key,
     table_id int references "tables" (id) on delete cascade not null,
-    profile_id int references "profiles" (id) on delete cascade not null,
+    profile_id text references "profiles" (firebase_id) on delete cascade not null,
     reservation_date text default '',
     cells int[],
-    num_of_guests int default 0,
     comment text default '',
+    num_of_guests int default 0
 );
 
 --TODO: Недавно просмотренные, Избранное (rest_id, cli_id), Рейтинг (rest_id, cli_id, value)
 
 CREATE INDEX IF NOT EXISTS idx_tables_restaurant_id on tables using btree(restaurant_id);
-CREATE INDEX IF NOT EXISTS idx_reservations_profile_id on reservations using btree(profile_id);
+--CREATE INDEX IF NOT EXISTS idx_reservations_profile_id on reservations using btree(profile_id);

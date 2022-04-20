@@ -64,9 +64,9 @@ type Reservation struct {
 	TableID         string        `json:"table_id" db:"table_id"`
 	ProfileID       string        `json:"profile_id" db:"profile_id"`
 	ReservationDate string        `json:"reservation_date" db:"reservation_date"`
-	NumOfGuests     int           `json:"num_of_guests" db:"num_of_guests"`
 	Cells           pq.Int64Array `json:"cells" db:"cells"`
 	Comment         string        `json:"comment" db:"comment"`
+	NumOfGuests     int           `json:"num_of_guests" db:"num_of_guests"`
 }
 
 type ReservationList struct {

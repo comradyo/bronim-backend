@@ -56,24 +56,24 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 	r := mux.NewRouter().PathPrefix("/bronim").Subrouter()
 
 	r.HandleFunc("/profiles", delivery.CreateProfile).Methods("POST")
-	r.HandleFunc("/profiles/{uuid:[0-9]+}", delivery.GetProfile).Methods("GET")
+	r.HandleFunc("/profiles/{uuid}", delivery.GetProfile).Methods("GET")
 	//MVP2// r.HandleFunc("/profile/{profile:[0-9]+}", delivery.UpdateProfile).Methods("POST")
 
 	r.HandleFunc("/restaurants", delivery.CreateRestaurant).Methods("POST")
-	r.HandleFunc("/restaurants/{restaurant:[0-9]+}", delivery.GetRestaurant).Methods("GET")
+	r.HandleFunc("/restaurants/{restaurant}", delivery.GetRestaurant).Methods("GET")
 
 	r.HandleFunc("/restaurants/popular", delivery.GetPopularRestaurants).Methods("GET")
 	r.HandleFunc("/restaurants/nearest", delivery.GetNearestRestaurants).Methods("GET")
 	r.HandleFunc("/restaurants/new", delivery.GetNewRestaurants).Methods("GET")
 	r.HandleFunc("/kitchens/{kitchen}", delivery.GetKitchenRestaurants).Methods("GET")
 
-	r.HandleFunc("/restaurants/{restaurant:[0-9]+}/reservations", delivery.GetRestaurantReservations).Methods("GET")
+	r.HandleFunc("/restaurants/{restaurant}/reservations", delivery.GetRestaurantReservations).Methods("GET")
 
 	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables", delivery.GetTables).Methods("GET")
-	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.CreateReservation).Methods("POST")
+	r.HandleFunc("/restaurants/{restaurant}/tables/{table}", delivery.CreateReservation).Methods("POST")
 	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.GetTableReservations).Methods("GET")
 
-	r.HandleFunc("/profiles/{profile:[0-9]+}/reservations", delivery.GetProfileReservations).Methods("GET")
+	r.HandleFunc("/profiles/{profile}/reservations", delivery.GetProfileReservations).Methods("GET")
 
 	//TODO: Vote
 
