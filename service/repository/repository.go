@@ -23,21 +23,21 @@ type profileIDNamed struct {
 func (r *Repository) CreateProfile(profile models.Profile) (models.Profile, error) {
 	query := `
 insert into profiles 
-(firebase_id, name, surname, date_of_birth, sex, phone_number, email, password, avatar_url)
-values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+(firebase_id, name, email)
+values ($1, $2, $3)
 returning (id)
 `
 	var insertedID string
 	err := r.db.Get(&insertedID, query,
 		profile.FirebaseID,
 		profile.Name,
-		profile.Surname,
-		profile.DateOfBirth,
-		profile.Sex,
-		profile.PhoneNumber,
+		//profile.Surname,
+		//profile.DateOfBirth,
+		//profile.Sex,
+		//profile.PhoneNumber,
 		profile.Email,
-		profile.Password,
-		profile.AvatarUrl,
+		//profile.Password,
+		//profile.AvatarUrl,
 	)
 	if err != nil {
 		return models.Profile{}, err

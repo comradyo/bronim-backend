@@ -47,16 +47,16 @@ type TableAndReservationsList struct {
 }
 
 type Profile struct {
-	ID          string `json:"id,omitempty" db:"id"`
-	FirebaseID  string `json:"firebase_id" db:"firebase_id"`
-	Name        string `json:"name" db:"name"`
-	Surname     string `json:"surname" db:"surname"`
-	DateOfBirth string `json:"date_of_birth" db:"date_of_birth"`
-	Sex         string `json:"sex" db:"sex"`
-	PhoneNumber string `json:"phone_number" db:"phone_number"`
-	Email       string `json:"email" db:"email"`
-	Password    string `json:"password" db:"password"`
-	AvatarUrl   string `json:"avatar_url" db:"avatar_url"`
+	ID         string `json:"id,omitempty" db:"id"`
+	FirebaseID string `json:"firebase_id" db:"firebase_id"`
+	Name       string `json:"name" db:"name"`
+	//Surname     string `json:"surname,omitempty" db:"surname"`
+	//DateOfBirth string `json:"date_of_birth,omitempty" db:"date_of_birth"`
+	//Sex         string `json:"sex,omitempty" db:"sex"`
+	//PhoneNumber string `json:"phone_number,omitempty" db:"phone_number"`
+	Email string `json:"email" db:"email"`
+	//Password    string `json:"password" db:"password"`
+	//AvatarUrl   string `json:"avatar_url,omitempty" db:"avatar_url"`
 }
 
 type Reservation struct {
