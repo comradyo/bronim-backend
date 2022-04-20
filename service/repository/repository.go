@@ -4,6 +4,7 @@ import (
 	"bronim/pkg/models"
 	sql "github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"strconv"
 )
 
 type Repository struct {
@@ -27,7 +28,7 @@ insert into profiles
 values ($1, $2, $3)
 returning (id)
 `
-	var insertedID string
+	var insertedID int
 	err := r.db.Get(&insertedID, query,
 		profile.FirebaseID,
 		profile.Name,
@@ -42,7 +43,8 @@ returning (id)
 	if err != nil {
 		return models.Profile{}, err
 	}
-	return r.GetProfile(insertedID)
+	insertedIDStr := strconv.Itoa(insertedID)
+	return r.GetProfile(insertedIDStr)
 }
 
 func (r *Repository) GetProfile(profileID string) (models.Profile, error) {
@@ -81,7 +83,7 @@ insert into restaurants (google_id, address, description, img_url, phone_number,
 values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::text[], $11)
 returning (id)
 `
-	var insertedID string
+	var insertedID int
 	err := r.db.Get(&insertedID, query,
 		restaurant.GoogleID,
 		restaurant.Address,
@@ -98,7 +100,8 @@ returning (id)
 	if err != nil {
 		return models.Restaurant{}, err
 	}
-	return r.GetRestaurant(insertedID)
+	insertedIDStr := strconv.Itoa(insertedID)
+	return r.GetRestaurant(insertedIDStr)
 }
 
 func (r *Repository) GetRestaurant(restaurantID string) (models.Restaurant, error) {
