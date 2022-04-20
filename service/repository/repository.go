@@ -4,7 +4,6 @@ import (
 	"bronim/pkg/models"
 	sql "github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"strconv"
 )
 
 type Repository struct {
@@ -26,10 +25,10 @@ func (r *Repository) CreateProfile(profile models.Profile) (models.Profile, erro
 insert into profiles 
 (firebase_id, name, email)
 values ($1, $2, $3)
-returning (id)
+returning (firebase_id)
 `
-	var insertedID int
-	err := r.db.Get(&insertedID, query,
+	var insertedFirebaseID string
+	err := r.db.Get(&insertedFirebaseID, query,
 		profile.FirebaseID,
 		profile.Name,
 		//profile.Surname,
@@ -43,8 +42,7 @@ returning (id)
 	if err != nil {
 		return models.Profile{}, err
 	}
-	insertedIDStr := strconv.Itoa(insertedID)
-	return r.GetProfile(insertedIDStr)
+	return r.GetProfile(insertedFirebaseID)
 }
 
 func (r *Repository) GetProfile(profileID string) (models.Profile, error) {
@@ -83,7 +81,7 @@ insert into restaurants (google_id, address, description, img_url, phone_number,
 values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::text[], $11)
 returning (id)
 `
-	var insertedID int
+	var insertedID string
 	err := r.db.Get(&insertedID, query,
 		restaurant.GoogleID,
 		restaurant.Address,
@@ -100,8 +98,7 @@ returning (id)
 	if err != nil {
 		return models.Restaurant{}, err
 	}
-	insertedIDStr := strconv.Itoa(insertedID)
-	return r.GetRestaurant(insertedIDStr)
+	return r.GetRestaurant(insertedID)
 }
 
 func (r *Repository) GetRestaurant(restaurantID string) (models.Restaurant, error) {
