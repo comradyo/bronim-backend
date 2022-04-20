@@ -189,7 +189,14 @@ VALUES
 returning id
 `
 	var insertedID int
-	err := r.db.Get(&insertedID, query, reservation)
+	err := r.db.Get(&insertedID, query,
+		reservation.TableID,
+		reservation.ProfileID,
+		reservation.ReservationDate,
+		reservation.Cells,
+		reservation.Comment,
+		reservation.NumOfGuests,
+	)
 	if err != nil {
 		return models.Reservation{}, err
 	}
