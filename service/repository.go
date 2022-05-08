@@ -10,7 +10,7 @@ type RestaurantsFilter struct {
 type Repository interface {
 	CreateProfile(profile models.Profile) (models.Profile, error)
 	GetProfile(profileID string) (models.Profile, error)
-	//MVP2// UpdateProfile(profileID string, profile models.Profile) (models.Profile, error)
+	UpdateProfile(profileID string, profile models.Profile) (models.Profile, error)
 	CreateRestaurant(restaurant models.Restaurant) (models.Restaurant, error)
 	GetRestaurant(restaurantID string) (models.Restaurant, error)
 	GetTable(tableID string) (models.Table, error)

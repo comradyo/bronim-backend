@@ -73,30 +73,32 @@ func (h *Delivery) GetProfile(w http.ResponseWriter, r *http.Request) {
 	utils.SendResponse(w, http.StatusOK, body)
 }
 
-//MVP2//
-/*
-func (h *Delivery) UpdateProfile(w http.ResponseWriter, r *http.Request) { log.DebugAtFunc(h.CreateProfile, "started")
+func (h *Delivery) UpdateProfile(w http.ResponseWriter, r *http.Request) {
+	log.DebugAtFunc(h.UpdateProfile, "started")
 	vars := mux.Vars(r)
 	profileID := vars["profile"]
 	profile := models.Profile{}
 	err := utils.GetObjectFromRequest(r.Body, profile)
-	if err != nil { log.ErrorAtFunc(h.CreateProfile, err)
+	if err != nil {
+		log.ErrorAtFunc(h.UpdateProfile, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
 	updatedProfile, err := h.repository.UpdateProfile(profileID, profile)
-	if err != nil { log.ErrorAtFunc(h.CreateProfile, err)
+	if err != nil {
+		log.ErrorAtFunc(h.UpdateProfile, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
 	body, err := utils.Marshall(updatedProfile)
-	if err != nil { log.ErrorAtFunc(h.CreateProfile, err)
+	if err != nil {
+		log.ErrorAtFunc(h.UpdateProfile, err)
 		utils.SendResponse(w, http.StatusInternalServerError, nil)
 		return
 	}
-	log.DebugAtFunc(h.GetProfileReservations, "started") utils.SendResponse(w, http.StatusOK, body)
+	log.DebugAtFunc(h.UpdateProfile, "started")
+	utils.SendResponse(w, http.StatusOK, body)
 }
-*/
 
 func (h *Delivery) CreateRestaurant(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.CreateRestaurant, "started")

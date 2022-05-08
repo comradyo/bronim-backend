@@ -54,8 +54,6 @@ select * from profiles where firebase_id = $1
 	return profile, err
 }
 
-//MVP2//
-/*
 func (r *Repository) UpdateProfile(profile models.Profile) (models.Profile, error) {
 	query := `
 update profiles set name = $1, surname = $2, date_of_birth = $3, sex = $4, phone_number = $5, email = $6, avatar_url = $7
@@ -73,7 +71,6 @@ select * from profiles where id = $1;
 	err = r.db.Get(&profile, query, updatedID)
 	return profile, err
 }
-*/
 
 func (r *Repository) CreateRestaurant(restaurant models.Restaurant) (models.Restaurant, error) {
 	query := `
