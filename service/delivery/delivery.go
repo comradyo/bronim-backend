@@ -76,7 +76,7 @@ func (h *Delivery) GetProfile(w http.ResponseWriter, r *http.Request) {
 func (h *Delivery) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.UpdateProfile, "started")
 	vars := mux.Vars(r)
-	profileID := vars["profile"]
+	profileID := vars["uuid"]
 	profile := models.Profile{}
 	err := utils.GetObjectFromRequest(r.Body, profile)
 	if err != nil {
@@ -395,7 +395,7 @@ func (h *Delivery) GetTableReservations(w http.ResponseWriter, r *http.Request) 
 func (h *Delivery) GetProfileReservations(w http.ResponseWriter, r *http.Request) {
 	log.DebugAtFunc(h.GetProfileReservations, "started")
 	vars := mux.Vars(r)
-	profileID := vars["profile"]
+	profileID := vars["uuid"]
 	profileReservations, err := h.repository.GetProfileReservations(profileID)
 	if err != nil {
 		log.ErrorAtFunc(h.GetProfileReservations, err)

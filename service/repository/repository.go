@@ -57,7 +57,7 @@ select * from profiles where firebase_id = $1
 func (r *Repository) UpdateProfile(profileID string, profile models.Profile) (models.Profile, error) {
 	query := `
 update profiles set name = $1, surname = $2, date_of_birth = $3, sex = $4, phone_number = $5, email = $6, avatar_url = $7
-where id = $8
+where firebase_id = $8
 returning id;
 `
 	var updatedID int

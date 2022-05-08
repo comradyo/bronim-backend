@@ -57,7 +57,7 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 
 	r.HandleFunc("/profiles", delivery.CreateProfile).Methods("POST")
 	r.HandleFunc("/profiles/{uuid}", delivery.GetProfile).Methods("GET")
-	r.HandleFunc("/profile/{profile:[0-9]+}", delivery.UpdateProfile).Methods("POST")
+	r.HandleFunc("/profiles/{uuid}", delivery.UpdateProfile).Methods("POST")
 
 	r.HandleFunc("/restaurants", delivery.CreateRestaurant).Methods("POST")
 	r.HandleFunc("/restaurants/{restaurant:[0-9]+}", delivery.GetRestaurant).Methods("GET")
@@ -73,7 +73,7 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 	r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.CreateReservation).Methods("POST")
 	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.GetTableReservations).Methods("GET")
 
-	r.HandleFunc("/profiles/{profile}/reservations", delivery.GetProfileReservations).Methods("GET")
+	r.HandleFunc("/profiles/{uuid}/reservations", delivery.GetProfileReservations).Methods("GET")
 
 	//TODO: Vote
 
