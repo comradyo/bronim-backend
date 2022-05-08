@@ -54,14 +54,22 @@ select * from profiles where firebase_id = $1
 	return profile, err
 }
 
-func (r *Repository) UpdateProfile(profile models.Profile) (models.Profile, error) {
+func (r *Repository) UpdateProfile(profileID string, profile models.Profile) (models.Profile, error) {
 	query := `
 update profiles set name = $1, surname = $2, date_of_birth = $3, sex = $4, phone_number = $5, email = $6, avatar_url = $7
 where id = $8
 returning id;
 `
 	var updatedID int
-	err := r.db.Get(&updatedID, query, profile)
+	err := r.db.Get(&updatedID, query,
+		profile.Name,
+		profile.Surname,
+		profile.DateOfBirth,
+		profile.Sex,
+		profile.PhoneNumber,
+		profile.Email,
+		profile.AvatarUrl,
+		profileID)
 	if err != nil {
 		return models.Profile{}, err
 	}
