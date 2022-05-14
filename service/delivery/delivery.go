@@ -405,6 +405,7 @@ func (h *Delivery) GetProfileReservations(w http.ResponseWriter, r *http.Request
 	profileReservationsList := models.ProfileReservationList{
 		Arr: profileReservations,
 	}
+	fmt.Printf("reservations = %v\n", profileReservations)
 	body, err := utils.Marshall(profileReservationsList)
 	if err != nil {
 		log.ErrorAtFunc(h.GetProfileReservations, err)
