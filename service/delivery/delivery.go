@@ -78,7 +78,6 @@ func (h *Delivery) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	profileID := vars["uuid"]
 	profile := models.Profile{}
-	log.DebugAtFunc(h.UpdateProfile, r.Body)
 	err := utils.GetObjectFromRequest(r.Body, &profile)
 	if err != nil {
 		log.ErrorAtFunc(h.UpdateProfile, err)
