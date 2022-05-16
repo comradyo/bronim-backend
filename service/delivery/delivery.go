@@ -258,9 +258,19 @@ func (h *Delivery) GetRestaurantReservations(w http.ResponseWriter, r *http.Requ
 	var numOfGuests string
 	if len(query["date"]) > 0 {
 		date = query["date"][0]
+	} else {
+		err := models.ErrEmptyValue("date")
+		log.ErrorAtFunc(h.GetRestaurantReservations, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
 	}
 	if len(query["guests"]) > 0 {
 		numOfGuests = query["guests"][0]
+	} else {
+		err := models.ErrEmptyValue("guests")
+		log.ErrorAtFunc(h.GetRestaurantReservations, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
 	}
 
 	reservations, err := h.repository.GetRestaurantReservations(restaurantID, date, numOfGuests)

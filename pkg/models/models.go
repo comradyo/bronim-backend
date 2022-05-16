@@ -1,6 +1,9 @@
 package models
 
-import "github.com/lib/pq"
+import (
+	"fmt"
+	"github.com/lib/pq"
+)
 
 type Restaurant struct {
 	ID             string         `json:"id" db:"id"`
@@ -38,8 +41,8 @@ type TableList struct {
 }
 
 type TableAndReservations struct {
-	TableID       string        `json:"table_id" db:"table_id"`
-	ReservedTimes pq.Int64Array `json:"reserved_cells" db:"reserved_cells"`
+	TableID       string         `json:"table_id" db:"table_id"`
+	ReservedTimes pq.StringArray `json:"reserved_cells" db:"reserved_cells"`
 }
 
 type TableAndReservationsList struct {
@@ -84,4 +87,8 @@ type ProfileReservationList struct {
 
 type Err struct {
 	ErrStr string `json:"error"`
+}
+
+func ErrEmptyValue(valueName string) error {
+	return fmt.Errorf(`value '%s' can't be null or empty`, valueName)
 }
