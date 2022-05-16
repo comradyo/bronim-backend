@@ -279,6 +279,13 @@ func (h *Delivery) GetRestaurantReservations(w http.ResponseWriter, r *http.Requ
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
+	for i := 0; i < len(reservations); i++ {
+		if len(reservations[i].ReservedTimes) == 48 {
+			reservations[i] = reservations[len(reservations)-1]
+			reservations = reservations[:len(reservations)-1]
+			i--
+		}
+	}
 	reservationsList := models.TableAndReservationsList{
 		Arr: reservations,
 	}
