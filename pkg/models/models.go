@@ -22,6 +22,8 @@ type Restaurant struct {
 	StartsAtCellID string         `json:"starts_at_cell_id" db:"starts_at_cell_id"`
 	EndsAtCellID   string         `json:"ends_at_cell_id" db:"ends_at_cell_id"`
 	Date 		   string		  `json:"date" db:"date"`
+	Lat			   string		  `json:"lat" db:"lat"`
+	Lng			   string		  `json:"lng" db:"lng"`
 }
 
 type RestaurantList struct {
