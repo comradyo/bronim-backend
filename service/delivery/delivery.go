@@ -7,8 +7,10 @@ import (
 	"bronim/pkg/utils"
 	"bronim/service"
 	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 func errBytes(err error) []byte {
@@ -297,6 +299,36 @@ func (h *Delivery) GetRestaurantReservations(w http.ResponseWriter, r *http.Requ
 	}
 	log.DebugAtFunc(h.GetRestaurantReservations, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
+}
+
+func (h *Delivery) GetFavourites(w http.ResponseWriter, r* http.Request) {
+	vars := mux.Vars(r)
+	uuid := vars["uuid"]
+	user, err := h.repository.GetProfile(uuid)
+	if err != nil {
+		log.ErrorAtFunc(h.GetRestaurantReservations, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	userId, _ := strconv.Atoi(user.ID)
+	rests, err := h.repository.GetFavouritesRestaurants(userId)
+	if err != nil {
+		log.ErrorAtFunc(h.GetRestaurantReservations, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	restaurants := models.RestaurantList{
+		Arr: rests,
+	}
+	body, err := utils.Marshall(restaurants)
+	if err != nil {
+		log.ErrorAtFunc(h.GetNewRestaurants, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	log.DebugAtFunc(h.GetProfileReservations, "ended")
+	utils.SendResponse(w, http.StatusOK, body)
+
 }
 
 //MVP2//

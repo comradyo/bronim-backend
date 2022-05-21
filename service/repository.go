@@ -22,6 +22,7 @@ type Repository interface {
 	//В деливери идем на GoogleAPI с координатами, полученными из запроса, берем айдишники близжайших ресторанов,
 	GetNearestRestaurants(apiRestaurants []models.Restaurant) ([]models.Restaurant, error)
 	GetNewRestaurants() ([]models.Restaurant, error)
+	GetFavouritesRestaurants(uuid int) ([]models.Restaurant, error)
 	GetKitchenRestaurants(kitchen string) ([]models.Restaurant, error)
 	//MVP2// GetRestaurantsByFilter(filter RestaurantsFilter) ([]models.Restaurant, error)
 	//MVP2// GetFavouriteRestaurants(profileID string) ([]models.Restaurant, error)

@@ -147,6 +147,17 @@ func (r *Repository) GetNewRestaurants() ([]models.Restaurant, error) {
 	return r.scanRestaurants(query)
 }
 
+func (r *Repository) GetFavouritesRestaurants(userID int) ([]models.Restaurant, error) {
+	query := `
+	select res.id, name, description, address, img_url, phone_number, 
+	email, website_url, kitchen, tags, rating, starts_at_cell_id, ends_at_cell_id, 
+	date, lat, lng from restaurants as res
+	join favourites as fav on res.id = fav.restaurant_id
+	where fav.profile_id = 15;
+	`
+	return r.scanRestaurants(query,userID)
+}
+
 func (r *Repository) GetKitchenRestaurants(kitchen string) ([]models.Restaurant, error) {
 	query := `
 select * from restaurants
