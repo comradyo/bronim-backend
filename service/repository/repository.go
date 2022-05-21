@@ -153,7 +153,7 @@ func (r *Repository) GetFavouritesRestaurants(userID int) ([]models.Restaurant, 
 	email, website_url, kitchen, tags, rating, starts_at_cell_id, ends_at_cell_id, 
 	date, lat, lng from restaurants as res
 	join favourites as fav on res.id = fav.restaurant_id
-	where fav.profile_id = 15;
+	where fav.profile_id = $1;
 	`
 	return r.scanRestaurants(query,userID)
 }
