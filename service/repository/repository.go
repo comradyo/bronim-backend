@@ -118,8 +118,9 @@ select * from restaurants where id = $1;
 //TODO: популярность
 func (r *Repository) GetPopularRestaurants() ([]models.Restaurant, error) {
 	query := `
-select * from restaurants
-LIMIT 10;
+	select * from restaurants 
+	order by rating desc 
+	LIMIT 10;
 `
 	return r.scanRestaurants(query)
 }
@@ -139,9 +140,9 @@ LIMIT 10;
 
 func (r *Repository) GetNewRestaurants() ([]models.Restaurant, error) {
 	query := `
-	select * from restaurants 
-	order by rating desc 
-	LIMIT 10;
+select * from restaurants
+         order by id desc
+LIMIT 10;
 `
 	return r.scanRestaurants(query)
 }
