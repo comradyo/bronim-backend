@@ -178,7 +178,6 @@ func (h *Delivery) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
-	log.DebugAtFunc(h.GetRestaurants, utils.StringStruct(body))
 
 	log.InfoAtFunc(h.GetRestaurants, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
@@ -266,7 +265,7 @@ func (h *Delivery) GetNewRestaurants(w http.ResponseWriter, r *http.Request) {
 func (h *Delivery) GetKitchenRestaurants(w http.ResponseWriter, r *http.Request) {
 	log.InfoAtFunc(h.GetKitchenRestaurants, "started")
 	vars := mux.Vars(r)
-	kitchen := vars["kitchen"]
+	kitchen := vars["cuisine"]
 	rests, err := h.repository.GetKitchenRestaurants(kitchen)
 	if err != nil {
 		log.ErrorAtFunc(h.GetKitchenRestaurants, err)
@@ -515,7 +514,7 @@ func (h *Delivery) Subscribe(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, _ := strconv.Atoi(user.ID)
 	restID, _ := strconv.Atoi(restaurantID)
-	err = h.repository.Subscribe(userID,restID)
+	err = h.repository.Subscribe(userID, restID)
 	if err != nil {
 		log.ErrorAtFunc(h.Subscribe, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
@@ -544,7 +543,7 @@ func (h *Delivery) Unsubscribe(w http.ResponseWriter, r *http.Request) {
 	}
 	userID, _ := strconv.Atoi(user.ID)
 	restID, _ := strconv.Atoi(restaurantID)
-	err = h.repository.Unsubscribe(userID,restID)
+	err = h.repository.Unsubscribe(userID, restID)
 	if err != nil {
 		log.ErrorAtFunc(h.Unsubscribe, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))

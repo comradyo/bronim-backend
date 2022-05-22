@@ -59,8 +59,8 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 	r.HandleFunc("/profiles/{uuid}", delivery.GetProfile).Methods("GET")
 	r.HandleFunc("/profiles/{uuid}", delivery.UpdateProfile).Methods("POST")
 	r.HandleFunc("/profiles/{uuid}/favourites", delivery.GetFavourites).Methods("GET")
-	r.HandleFunc("/profiles/{uuid}/subscribe/{restid}",delivery.Subscribe).Methods("GET")
-	r.HandleFunc("/profiles/{uuid}/unsubscribe/{restid}",delivery.Unsubscribe).Methods("GET")
+	r.HandleFunc("/profiles/{uuid}/subscribe/{restid}", delivery.Subscribe).Methods("GET")
+	r.HandleFunc("/profiles/{uuid}/unsubscribe/{restid}", delivery.Unsubscribe).Methods("GET")
 
 	r.HandleFunc("/restaurants", delivery.CreateRestaurant).Methods("POST")
 	r.HandleFunc("/restaurants/{restaurant:[0-9]+}", delivery.GetRestaurant).Methods("GET")
@@ -69,7 +69,7 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 	r.HandleFunc("/restaurants/popular", delivery.GetPopularRestaurants).Methods("GET")
 	r.HandleFunc("/restaurants/nearest", delivery.GetNearestRestaurants).Methods("GET")
 	r.HandleFunc("/restaurants/new", delivery.GetNewRestaurants).Methods("GET")
-	r.HandleFunc("/kitchens/{kitchen}", delivery.GetKitchenRestaurants).Methods("GET")
+	r.HandleFunc("/cuisines/{cuisine}", delivery.GetKitchenRestaurants).Methods("GET")
 
 	r.HandleFunc("/restaurants/{restaurant:[0-9]+}/reservations", delivery.GetRestaurantReservations).Methods("GET")
 
