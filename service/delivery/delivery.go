@@ -500,3 +500,49 @@ func (h *Delivery) GetProfileReservations(w http.ResponseWriter, r *http.Request
 	log.InfoAtFunc(h.GetProfileReservations, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
 }
+
+func (h *Delivery) Subscribe(w http.ResponseWriter, r *http.Request) {
+	log.InfoAtFunc(h.Subscribe, "started")
+	vars := mux.Vars(r)
+	profileID := vars["uuid"]
+	restaurantID := vars["restid"]
+	user, err := h.repository.GetProfile(profileID)
+	if err != nil {
+		log.ErrorAtFunc(h.Subscribe, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	userID, _ := strconv.Atoi(user.ID)
+	restID, _ := strconv.Atoi(restaurantID)
+	err = h.repository.Subscribe(userID,restID)
+	if err != nil {
+		log.ErrorAtFunc(h.Subscribe, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	log.InfoAtFunc(h.Subscribe, "ended")
+	utils.SendResponse(w, http.StatusOK, []byte("OK"))
+}
+
+func (h *Delivery) Unsubscribe(w http.ResponseWriter, r *http.Request) {
+	log.InfoAtFunc(h.Unsubscribe, "started")
+	vars := mux.Vars(r)
+	profileID := vars["uuid"]
+	restaurantID := vars["restid"]
+	user, err := h.repository.GetProfile(profileID)
+	if err != nil {
+		log.ErrorAtFunc(h.Unsubscribe, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	userID, _ := strconv.Atoi(user.ID)
+	restID, _ := strconv.Atoi(restaurantID)
+	err = h.repository.Unsubscribe(userID,restID)
+	if err != nil {
+		log.ErrorAtFunc(h.Unsubscribe, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	log.InfoAtFunc(h.Unsubscribe, "ended")
+	utils.SendResponse(w, http.StatusOK, []byte("OK"))
+}
