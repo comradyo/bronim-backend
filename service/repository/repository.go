@@ -326,3 +326,21 @@ group by table_id;
 	}
 	return reservations, nil
 }
+
+func (r *Repository) Subscribe(userID, restID int) error {
+	query := `insert into "favourites" (profile_id, restaurant_id) values ($1,$2);`
+	_, err := r.db.Queryx(query,userID,restID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *Repository) Unsubscribe(userID, restID int) error {
+	query := `delete from "favourites" where profile_id = $1 and restaurant_id = $2;`
+	_, err := r.db.Queryx(query,userID,restID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

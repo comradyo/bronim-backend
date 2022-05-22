@@ -16,6 +16,8 @@ type Repository interface {
 	GetTable(tableID string) (models.Table, error)
 	GetTables(restaurantID string) ([]models.Table, error)
 	CreateReservation(reservation models.Reservation) (models.Reservation, error)
+	Subscribe(profileID,restID int) error
+	Unsubscribe(profileID,restID int) error
 	//MVP2// GetTableReservations(tableID string) ([]models.Reservation, error)
 	GetProfileReservations(profileID string) ([]models.ProfileReservation, error)
 	GetPopularRestaurants() ([]models.Restaurant, error)
