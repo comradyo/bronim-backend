@@ -178,6 +178,7 @@ func (h *Delivery) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
+	log.DebugAtFunc(h.GetRestaurants, utils.StringStruct(body))
 
 	log.InfoAtFunc(h.GetRestaurants, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
