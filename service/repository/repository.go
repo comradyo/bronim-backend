@@ -82,7 +82,7 @@ select * from profiles where id = $1;
 
 func (r *Repository) CreateRestaurant(restaurant models.Restaurant) (models.Restaurant, error) {
 	query := `
-insert into restaurants (google_id, address, description, img_url, phone_number, email, website_url, geoposition, kitchen, tags, rating)
+insert into restaurants (google_id, address, description, img_url, phone_number, email, website_url, kitchen, tags, rating, date, lat, lng)
 values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10::text[], $11)
 returning (id)
 `
@@ -95,10 +95,12 @@ returning (id)
 		restaurant.PhoneNumber,
 		restaurant.Email,
 		restaurant.WebsiteUrl,
-		restaurant.Geoposition,
 		restaurant.Kitchen,
 		restaurant.Tags,
 		restaurant.Rating,
+		restaurant.Date,
+		restaurant.Lat,
+		restaurant.Lng,
 	)
 	if err != nil {
 		return models.Restaurant{}, err
@@ -274,12 +276,14 @@ select restaurant.*, reservation.* from
 			&t.Restaurant.PhoneNumber,
 			&t.Restaurant.Email,
 			&t.Restaurant.WebsiteUrl,
-			&t.Restaurant.Geoposition,
 			&t.Restaurant.Kitchen,
 			&t.Restaurant.Tags,
 			&t.Restaurant.Rating,
 			&t.Restaurant.StartsAtCellID,
 			&t.Restaurant.EndsAtCellID,
+			&t.Restaurant.Date,
+			&t.Restaurant.Lat,
+			&t.Restaurant.Lng,
 			&t.Reservation.ID,
 			&t.Reservation.TableID,
 			&t.Reservation.ProfileID,
@@ -329,7 +333,7 @@ group by table_id;
 
 func (r *Repository) Subscribe(userID, restID int) error {
 	query := `insert into "favourites" (profile_id, restaurant_id) values ($1,$2);`
-	_, err := r.db.Queryx(query,userID,restID)
+	_, err := r.db.Queryx(query, userID, restID)
 	if err != nil {
 		return err
 	}
@@ -338,7 +342,7 @@ func (r *Repository) Subscribe(userID, restID int) error {
 
 func (r *Repository) Unsubscribe(userID, restID int) error {
 	query := `delete from "favourites" where profile_id = $1 and restaurant_id = $2;`
-	_, err := r.db.Queryx(query,userID,restID)
+	_, err := r.db.Queryx(query, userID, restID)
 	if err != nil {
 		return err
 	}

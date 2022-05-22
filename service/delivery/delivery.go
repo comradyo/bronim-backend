@@ -170,7 +170,7 @@ func (h *Delivery) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	restaurants := models.RestaurantList{
-		Arr: rests,
+		Arr: models.ToEmptyRestaurantSLice(rests),
 	}
 	body, err := utils.Marshall(restaurants)
 	if err != nil {
@@ -192,7 +192,7 @@ func (h *Delivery) GetPopularRestaurants(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	restaurants := models.RestaurantList{
-		Arr: rests,
+		Arr: models.ToEmptyRestaurantSLice(rests),
 	}
 	body, err := utils.Marshall(restaurants)
 	if err != nil {
@@ -229,7 +229,7 @@ func (h *Delivery) GetNearestRestaurants(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	restaurants := models.RestaurantList{
-		Arr: rests,
+		Arr: models.ToEmptyRestaurantSLice(rests),
 	}
 	body, err := utils.Marshall(restaurants)
 	if err != nil {
@@ -250,7 +250,7 @@ func (h *Delivery) GetNewRestaurants(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	restaurants := models.RestaurantList{
-		Arr: rests,
+		Arr: models.ToEmptyRestaurantSLice(rests),
 	}
 	body, err := utils.Marshall(restaurants)
 	if err != nil {
@@ -273,7 +273,7 @@ func (h *Delivery) GetKitchenRestaurants(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	restaurants := models.RestaurantList{
-		Arr: rests,
+		Arr: models.ToEmptyRestaurantSLice(rests),
 	}
 	body, err := utils.Marshall(restaurants)
 	if err != nil {
@@ -354,7 +354,7 @@ func (h *Delivery) GetFavourites(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	restaurants := models.RestaurantList{
-		Arr: rests,
+		Arr: models.ToEmptyRestaurantSLice(rests),
 	}
 	body, err := utils.Marshall(restaurants)
 	if err != nil {
@@ -487,10 +487,10 @@ func (h *Delivery) GetProfileReservations(w http.ResponseWriter, r *http.Request
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
+	profileReservations = models.ToEmptyProfileReservationSLice(profileReservations)
 	profileReservationsList := models.ProfileReservationList{
 		Arr: profileReservations,
 	}
-	fmt.Printf("reservations = %v\n", profileReservations)
 	body, err := utils.Marshall(profileReservationsList)
 	if err != nil {
 		log.ErrorAtFunc(h.GetProfileReservations, err)

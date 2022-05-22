@@ -15,15 +15,21 @@ type Restaurant struct {
 	PhoneNumber    string         `json:"phone_number" db:"phone_number"`
 	Email          string         `json:"email" db:"email"`
 	WebsiteUrl     string         `json:"website_url" db:"website_url"`
-	Geoposition    string         `json:"geoposition" db:"geoposition"`
 	Kitchen        string         `json:"kitchen" db:"kitchen"`
 	Tags           pq.StringArray `json:"tags" db:"tags"`
 	Rating         string         `json:"rating" db:"rating"`
 	StartsAtCellID string         `json:"starts_at_cell_id" db:"starts_at_cell_id"`
 	EndsAtCellID   string         `json:"ends_at_cell_id" db:"ends_at_cell_id"`
-	Date 		   string		  `json:"date" db:"date"`
-	Lat			   string		  `json:"lat" db:"lat"`
-	Lng			   string		  `json:"lng" db:"lng"`
+	Date           string         `json:"date" db:"date"`
+	Lat            string         `json:"lat" db:"lat"`
+	Lng            string         `json:"lng" db:"lng"`
+}
+
+func ToEmptyRestaurantSLice(slice []Restaurant) []Restaurant {
+	if slice == nil {
+		return []Restaurant{}
+	}
+	return slice
 }
 
 type RestaurantList struct {
@@ -79,6 +85,13 @@ type ReservationList struct {
 	Arr []Reservation `json:"reservations"`
 }
 
+func ToEmptyReservationSLice(slice []Reservation) []Reservation {
+	if slice == nil {
+		return []Reservation{}
+	}
+	return slice
+}
+
 type ProfileReservation struct {
 	Restaurant  Restaurant  `json:"restaurant" db:"restaurant"`
 	Reservation Reservation `json:"reservation" db:"reservation"`
@@ -86,6 +99,13 @@ type ProfileReservation struct {
 
 type ProfileReservationList struct {
 	Arr []ProfileReservation `json:"profile_reservations"`
+}
+
+func ToEmptyProfileReservationSLice(slice []ProfileReservation) []ProfileReservation {
+	if slice == nil {
+		return []ProfileReservation{}
+	}
+	return slice
 }
 
 type Err struct {
