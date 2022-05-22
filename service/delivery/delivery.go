@@ -521,7 +521,13 @@ func (h *Delivery) Subscribe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.InfoAtFunc(h.Subscribe, "ended")
-	utils.SendResponse(w, http.StatusOK, []byte("OK"))
+	message, err := utils.Marshall(models.OK{OkMessage: "OK"})
+	if err != nil {
+		log.ErrorAtFunc(h.Subscribe, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	utils.SendResponse(w, http.StatusOK, message)
 }
 
 func (h *Delivery) Unsubscribe(w http.ResponseWriter, r *http.Request) {
@@ -544,5 +550,11 @@ func (h *Delivery) Unsubscribe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.InfoAtFunc(h.Unsubscribe, "ended")
-	utils.SendResponse(w, http.StatusOK, []byte("OK"))
+	message, err := utils.Marshall(models.OK{OkMessage: "OK"})
+	if err != nil {
+		log.ErrorAtFunc(h.Unsubscribe, err)
+		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
+		return
+	}
+	utils.SendResponse(w, http.StatusOK, message)
 }

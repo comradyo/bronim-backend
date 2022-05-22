@@ -92,6 +92,10 @@ type Err struct {
 	ErrStr string `json:"error"`
 }
 
+type OK struct {
+	OkMessage string `json:"ok"`
+}
+
 func ErrEmptyValue(valueName string) error {
 	return fmt.Errorf(`value '%s' can't be null or empty`, valueName)
 }
