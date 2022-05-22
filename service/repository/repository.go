@@ -155,7 +155,7 @@ func (r *Repository) GetFavouritesRestaurants(userID int) ([]models.Restaurant, 
 	join favourites as fav on res.id = fav.restaurant_id
 	where fav.profile_id = $1;
 	`
-	return r.scanRestaurants(query,userID)
+	return r.scanRestaurants(query, userID)
 }
 
 func (r *Repository) GetKitchenRestaurants(kitchen string) ([]models.Restaurant, error) {

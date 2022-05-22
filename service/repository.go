@@ -20,6 +20,7 @@ type Repository interface {
 	GetProfileReservations(profileID string) ([]models.ProfileReservation, error)
 	GetPopularRestaurants() ([]models.Restaurant, error)
 	//В деливери идем на GoogleAPI с координатами, полученными из запроса, берем айдишники близжайших ресторанов,
+	//GetRestaurants(filter GetRestaurantsFilter) ([]models.Restaurant, error)
 	GetNearestRestaurants(apiRestaurants []models.Restaurant) ([]models.Restaurant, error)
 	GetNewRestaurants() ([]models.Restaurant, error)
 	GetFavouritesRestaurants(uuid int) ([]models.Restaurant, error)
@@ -27,4 +28,8 @@ type Repository interface {
 	//MVP2// GetRestaurantsByFilter(filter RestaurantsFilter) ([]models.Restaurant, error)
 	//MVP2// GetFavouriteRestaurants(profileID string) ([]models.Restaurant, error)
 	GetRestaurantReservations(restaurantID, date string, numOfGuests string) ([]models.TableAndReservations, error)
+}
+
+type GetRestaurantsFilter struct {
+	Cuisine string
 }

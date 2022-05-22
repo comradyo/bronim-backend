@@ -6,23 +6,26 @@ DROP TABLE IF EXISTS "profiles" cascade;
 DROP TABLE IF EXISTS "tables" cascade;
 DROP TABLE IF EXISTS "restaurants" cascade;
 
-CREATE TABLE "restaurants"
+create table restaurants
 (
-    id serial primary key,
-    google_id text default '',
-    name text default '',
-    description text default '',
-    address text default '',
-    img_url text default '',
-    phone_number text default '',
-    email text default '',
-    website_url text default '',
-    geoposition text default '',
-    kitchen text default '',
-    tags text[],
-    rating int default 1,
-    starts_at_cell_id int default 0,
-    ends_at_cell_id int default 47
+    id                serial
+        primary key,
+    google_id         text        default ''::text,
+    name              text        default ''::text,
+    description       text        default ''::text,
+    address           text        default ''::text,
+    img_url           text        default ''::text,
+    phone_number      text        default ''::text,
+    email             text        default ''::text,
+    website_url       text        default ''::text,
+    kitchen           text        default ''::text,
+    tags              text[],
+    rating            real        default 1,
+    starts_at_cell_id integer     default 0,
+    ends_at_cell_id   integer     default 47,
+    date              date        default CURRENT_DATE,
+    lat               varchar(50) default '55.7522200'::character varying,
+    lng               varchar(50) default '37.6155600'::character varying
 );
 
 CREATE TABLE "tables"
@@ -60,7 +63,15 @@ CREATE TABLE "reservations"
     num_of_guests int default 0
 );
 
---TODO: Недавно просмотренные, Избранное (rest_id, cli_id), Рейтинг (rest_id, cli_id, value)
+create table favourites
+(
+    id serial unique,
+    profile_id integer not null references profiles(id) on delete cascade,
+    restaurant_id integer not null references restaurants(id) on delete cascade,
+    unique (profile_id, restaurant_id)
+);
+
+--TODO: Недавно просмотренные, Рейтинг (rest_id, cli_id, value)
 
 CREATE INDEX IF NOT EXISTS idx_tables_restaurant_id on tables using btree(restaurant_id);
 --CREATE INDEX IF NOT EXISTS idx_reservations_profile_id on reservations using btree(profile_id);
