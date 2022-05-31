@@ -143,7 +143,6 @@ func (r *Repository) GetNewRestaurants() ([]models.Restaurant, error) {
 	query := `
 	select * from restaurants 
 	order by date desc 
-	LIMIT 10;
 `
 	return r.scanRestaurants(query)
 }
