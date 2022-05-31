@@ -134,8 +134,7 @@ TODO: сначала инсертим, потом достаём по айдиш
 //В деливери идем на GoogleAPI с координатами, полученными из запроса, берем айдишники близжайших ресторанов,
 func (r *Repository) GetNearestRestaurants(apiRestaurants []models.Restaurant) ([]models.Restaurant, error) {
 	query := `
-select * from restaurants
-LIMIT 10;
+select * from restaurants;
 `
 	return r.scanRestaurants(query)
 }
