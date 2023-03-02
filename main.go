@@ -42,7 +42,7 @@ func NewDB() (*sql.DB, error) {
 	password := "yo_password"
 	//host := viper.GetString("postgres_db.host")
 	//port := viper.GetString("postgres_db.port")
-	host := "95.163.212.36"
+	host := "194.87.111.83"
 	port := "5432"
 	dbname := "bronim"
 	sslmode := "disable"
