@@ -72,10 +72,7 @@ func setRouter(delivery *delivery.Delivery) *mux.Router {
 	r.HandleFunc("/cuisines/{cuisine}", delivery.GetKitchenRestaurants).Methods("GET")
 
 	r.HandleFunc("/restaurants/{restaurant:[0-9]+}/reservations", delivery.GetRestaurantReservations).Methods("GET")
-
-	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables", delivery.GetTables).Methods("GET")
 	r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.CreateReservation).Methods("POST")
-	//MVP2// r.HandleFunc("/restaurants/{restaurant:[0-9]+}/tables/{table:[0-9]+}", delivery.GetTableReservations).Methods("GET")
 
 	r.HandleFunc("/profiles/{uuid}/reservations", delivery.GetProfileReservations).Methods("GET")
 

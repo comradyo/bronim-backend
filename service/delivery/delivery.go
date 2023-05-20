@@ -152,23 +152,29 @@ func (h *Delivery) GetRestaurants(w http.ResponseWriter, r *http.Request) {
 	log.InfoAtFunc(h.GetRestaurants, "started")
 
 	q := r.URL.Query()
-	var cuisine string
+	var (
+		cuisine string
+		tags    []string
+	)
 	if len(q["cuisine"]) > 0 {
 		cuisine = q["cuisine"][0]
 	}
+	if len(q["filter"]) > 0 {
+		tags = q["filter"]
+	}
 
-	/*
-		filter := service.GetRestaurantsFilter{
-			Cuisine: cuisine,
-		}
-	*/
+	filter := service.GetRestaurantsFilter{
+		Cuisine: cuisine,
+		Tags:    tags,
+	}
 
-	rests, err := h.repository.GetKitchenRestaurants(cuisine)
+	rests, err := h.repository.GetKitchenRestaurants(filter)
 	if err != nil {
 		log.ErrorAtFunc(h.GetRestaurants, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
 		return
 	}
+
 	restaurants := models.RestaurantList{
 		Arr: models.ToEmptyRestaurantSLice(rests),
 	}
@@ -204,8 +210,6 @@ func (h *Delivery) GetPopularRestaurants(w http.ResponseWriter, r *http.Request)
 	utils.SendResponse(w, http.StatusOK, body)
 }
 
-//TODO: работа с гугловской апишкой
-//В деливери идем на GoogleAPI с координатами, полученными из запроса, берем айдишники близжайших ресторанов,
 func (h *Delivery) GetNearestRestaurants(w http.ResponseWriter, r *http.Request) {
 	log.InfoAtFunc(h.GetNearestRestaurants, "started")
 	q := r.URL.Query()
@@ -266,7 +270,10 @@ func (h *Delivery) GetKitchenRestaurants(w http.ResponseWriter, r *http.Request)
 	log.InfoAtFunc(h.GetKitchenRestaurants, "started")
 	vars := mux.Vars(r)
 	kitchen := vars["cuisine"]
-	rests, err := h.repository.GetKitchenRestaurants(kitchen)
+	filter := service.GetRestaurantsFilter{
+		Cuisine: kitchen,
+	}
+	rests, err := h.repository.GetKitchenRestaurants(filter)
 	if err != nil {
 		log.ErrorAtFunc(h.GetKitchenRestaurants, err)
 		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))

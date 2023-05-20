@@ -2,7 +2,9 @@ package repository
 
 import (
 	"bronim/pkg/models"
+	"bronim/service"
 	sql "github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 )
 
@@ -117,7 +119,6 @@ select * from restaurants where id = $1;
 	return restaurant, err
 }
 
-//TODO: популярность
 func (r *Repository) GetPopularRestaurants() ([]models.Restaurant, error) {
 	query := `
 	select * from restaurants 
@@ -127,11 +128,6 @@ func (r *Repository) GetPopularRestaurants() ([]models.Restaurant, error) {
 	return r.scanRestaurants(query)
 }
 
-//TODO: insert if not exists
-/*
-TODO: сначала инсертим, потом достаём по айдишникам из apiRestaurants
-*/
-//В деливери идем на GoogleAPI с координатами, полученными из запроса, берем айдишники близжайших ресторанов,
 func (r *Repository) GetNearestRestaurants(apiRestaurants []models.Restaurant) ([]models.Restaurant, error) {
 	query := `
 select * from restaurants;
@@ -159,13 +155,25 @@ func (r *Repository) GetFavouritesRestaurants(userID int) ([]models.Restaurant, 
 	return r.scanRestaurants(query, userID)
 }
 
-func (r *Repository) GetKitchenRestaurants(kitchen string) ([]models.Restaurant, error) {
-	query := `
-select * from restaurants
-         where kitchen = $1
-LIMIT 10;
-`
-	return r.scanRestaurants(query, kitchen)
+func (r *Repository) GetKitchenRestaurants(filter service.GetRestaurantsFilter) ([]models.Restaurant, error) {
+	query := "select * from restaurants where "
+	if filter.Cuisine != "" {
+		query += `kitchen = lower($1) and `
+	} else {
+		query += `$1 = $1 and `
+	}
+	if len(filter.Tags) != 0 {
+		query += `$2 <@ ARRAY[tags]`
+	} else {
+		query += `$2 = $2`
+	}
+
+	postgresTags := make(pq.StringArray, len(filter.Tags))
+	for i := range filter.Tags {
+		postgresTags[i] = filter.Tags[i]
+	}
+
+	return r.scanRestaurants(query, filter.Cuisine, postgresTags)
 }
 
 func (r *Repository) GetTable(tableID string) (models.Table, error) {
@@ -224,30 +232,6 @@ select * from reservations where id = $1;
 	err = r.db.Get(&reservation, query, insertedID)
 	return reservation, err
 }
-
-//MVP2//
-/*
-func (r *Repository) GetTableReservations(tableID string) ([]models.Reservation, error) {
-	query := `
-select * from reservations where table_id = $1;
-`
-	rows, err := r.db.Queryx(query, tableID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var reservations []models.Reservation
-	for rows.Next() {
-		var t models.Reservation
-		err := rows.StructScan(&t)
-		if err != nil {
-			return nil, err
-		}
-		reservations = append(reservations, t)
-	}
-	return reservations, nil
-}
-*/
 
 func (r *Repository) GetProfileReservations(profileID string) ([]models.ProfileReservation, error) {
 	query := `
