@@ -289,11 +289,11 @@ select table_id, array_remove(array_agg(reserved_cells order by reserved_cells),
 from (
          select distinct tb.id as table_id, unnest(rs.cells)::text as reserved_cells
          from tables tb join reservations rs on tb.id = rs.table_id
-         where tb.restaurant_id = $1 and rs.reservation_date = $2 and tb.places = $3
+         where tb.restaurant_id = $1 and rs.reservation_date = $2 and tb.places >= $3
          union
          select distinct tb.id as table_id, null as reserved_cells
          from tables tb left join reservations rs on tb.id = rs.table_id
-         where tb.restaurant_id = $1 and tb.places = $3
+         where tb.restaurant_id = $1 and tb.places >= $3
      ) as s
 group by table_id;
 `

@@ -374,32 +374,6 @@ func (h *Delivery) GetFavourites(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//MVP2//
-/*
-func (h *Delivery) GetTables(w http.ResponseWriter, r *http.Request) {
-	log.InfoAtFunc(h.GetTables, "started")
-	vars := mux.Vars(r)
-	restaurantID := vars["restaurant"]
-	tables, err := h.repository.GetTables(restaurantID)
-	if err != nil {
-		log.ErrorAtFunc(h.GetTables, err)
-		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
-		return
-	}
-	tablesList := models.Tables{
-		Arr: tables,
-	}
-	body, err := utils.Marshall(tablesList)
-	if err != nil {
-		log.ErrorAtFunc(h.GetTables, err)
-		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
-		return
-	}
-	log.InfoAtFunc(h.GetTables, "ended")
-	utils.SendResponse(w, http.StatusOK, body)
-}
-*/
-
 func (h *Delivery) CreateReservation(w http.ResponseWriter, r *http.Request) {
 	log.InfoAtFunc(h.CreateReservation, "started")
 	vars := mux.Vars(r)
@@ -442,47 +416,6 @@ func (h *Delivery) CreateReservation(w http.ResponseWriter, r *http.Request) {
 	log.InfoAtFunc(h.CreateReservation, "ended")
 	utils.SendResponse(w, http.StatusOK, body)
 }
-
-//MVP2//
-/*
-func (h *Delivery) GetTableReservations(w http.ResponseWriter, r *http.Request) {
-	log.InfoAtFunc(h.GetTableReservations, "started")
-	vars := mux.Vars(r)
-	restaurantID := vars["restaurant"]
-	tableID := vars["table"]
-
-	table, err := h.repository.GetTable(tableID)
-	if err != nil {
-		log.ErrorAtFunc(h.GetTableReservations, err)
-		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
-		return
-	}
-	if table.RestaurantID != restaurantID {
-		utils.SendResponse(w, http.StatusInternalServerError, errBytes(
-			fmt.Errorf("table %s is not in restaurant %s", tableID, restaurantID),
-		))
-		return
-	}
-
-	reservations, err := h.repository.GetTableReservations(tableID)
-	if err != nil {
-		log.ErrorAtFunc(h.GetTableReservations, err)
-		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
-		return
-	}
-	reservationsList := models.Reservations{
-		Arr: reservations,
-	}
-	body, err := utils.Marshall(reservationsList)
-	if err != nil {
-		log.ErrorAtFunc(h.GetTableReservations, err)
-		utils.SendResponse(w, http.StatusInternalServerError, errBytes(err))
-		return
-	}
-	log.InfoAtFunc(h.GetTableReservations, "ended")
-	utils.SendResponse(w, http.StatusOK, body)
-}
-*/
 
 func (h *Delivery) GetProfileReservations(w http.ResponseWriter, r *http.Request) {
 	log.InfoAtFunc(h.GetProfileReservations, "started")
